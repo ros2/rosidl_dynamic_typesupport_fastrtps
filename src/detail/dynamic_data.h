@@ -16,6 +16,7 @@
 #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__DYNAMIC_DATA_H_
 
 #include <wchar.h>
+#include <rcutils/types/uint8_array.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 
 
@@ -82,6 +83,14 @@ fastrtps__dynamic_data_clone(rosidl_dynamic_typesupport_serialization_support_im
 
 void
 fastrtps__dynamic_data_fini(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);
+
+
+// DYNAMIC DATA SERIALIZATION ======================================================================
+bool
+fastrtps__dynamic_data_serialize(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rcutils_uint8_array_t * buffer);
+
+bool
+fastrtps__dynamic_data_deserialize(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rcutils_uint8_array_t * buffer);
 
 
 // DYNAMIC DATA PRIMITIVE MEMBERS GETTERS ==========================================================
