@@ -11,9 +11,9 @@
 
   <buildtool_depend>ament_cmake_ros</buildtool_depend>
 
-  <build_depend>rosidl_dynamic_typesupport</build_depend>
-  <build_depend>fastcdr</build_depend>
-  <build_depend>fastrtps</build_depend>
+  <depend>rosidl_dynamic_typesupport</depend>
+  <depend>fastcdr</depend>
+  <depend>fastrtps</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

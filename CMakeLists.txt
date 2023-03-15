@@ -60,8 +60,8 @@ install(DIRECTORY include/
 )
 
 ament_export_targets(${PROJECT_NAME}-export HAS_LIBRARY_TARGET)
-ament_export_dependencies(rosidl_dynamic_typesupport)
 ament_export_dependencies(fastcdr)
 ament_export_dependencies(fastrtps)
+ament_export_dependencies(rosidl_dynamic_typesupport)
 
 ament_package()

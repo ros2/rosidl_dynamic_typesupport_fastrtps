@@ -102,7 +102,7 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     fastrtps__dynamic_type_init_from_dynamic_type_builder;
 
   serialization_support_interface->dynamic_type_init_from_description =
-    (rosidl_dynamic_typesupport_dynamic_type_impl_t * (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, type_description_t *))
+    (rosidl_dynamic_typesupport_dynamic_type_impl_t * (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_runtime_c__type_description__TypeDescription *))
     fastrtps__dynamic_type_init_from_description;
 
   serialization_support_interface->dynamic_type_clone =

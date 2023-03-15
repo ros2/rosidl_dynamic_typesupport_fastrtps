@@ -15,7 +15,10 @@
 #include <cstring>
 #include <cwchar>
 
+#include <fastdds/rtps/common/SerializedPayload.h>
+
 #include <fastrtps/types/DynamicDataHelper.hpp>
+#include <fastrtps/types/DynamicPubSubType.h>
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 
 #include "dynamic_data.h"
@@ -185,9 +188,10 @@ fastrtps__dynamic_data_fini(rosidl_dynamic_typesupport_serialization_support_imp
 bool
 fastrtps__dynamic_data_serialize(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rcutils_uint8_array_t * buffer)
 {
+  (void) serialization_support_impl;
   auto m_type = std::make_shared<eprosima::fastrtps::types::DynamicPubSubType>();
   size_t data_length = static_cast<size_t>(
-    m_type.getSerializedSizeProvider(static_cast<DynamicData *>(data_impl->handle))());
+    m_type->getSerializedSizeProvider(static_cast<DynamicData *>(data_impl->handle))());
 
   if (buffer->buffer_capacity < data_length) {
     if (rcutils_uint8_array_resize(buffer, data_length) != RCUTILS_RET_OK) {
@@ -204,7 +208,8 @@ fastrtps__dynamic_data_serialize(rosidl_dynamic_typesupport_serialization_suppor
     buffer->buffer_length = payload->length;
 
     // Pass ownership of serialized buffer to buffer argument
-    buffer->buffer = static_cast<char *>(payload->data);
+    // NOTE(methylDragon): Dubious cast... (we're going from octet to uint8_t, but it's just bytes?)
+    buffer->buffer = static_cast<uint8_t *>(payload->data);
     payload->data = nullptr;
 
     return true;
@@ -219,6 +224,7 @@ fastrtps__dynamic_data_serialize(rosidl_dynamic_typesupport_serialization_suppor
 bool
 fastrtps__dynamic_data_deserialize(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rcutils_uint8_array_t * buffer)
 {
+  (void) serialization_support_impl;
   auto payload = std::make_shared<eprosima::fastrtps::rtps::SerializedPayload_t>(
     buffer->buffer_length);
 
@@ -231,7 +237,7 @@ fastrtps__dynamic_data_deserialize(rosidl_dynamic_typesupport_serialization_supp
   auto m_type = std::make_shared<eprosima::fastrtps::types::DynamicPubSubType>();
 
   // This copies!
-  return (m_type->deserialize(payload.get(), dyn_data->impl->handle)) {  // Deserializes payload into dyn_data
+  if (m_type->deserialize(payload.get(), data_impl->handle)) {  // Deserializes payload into dyn_data
     payload->data = nullptr;  // Data gets freed on buffer fini outside
     return true;
   } else {
