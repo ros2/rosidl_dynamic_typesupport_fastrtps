@@ -165,21 +165,25 @@ fastrtps__dynamic_type_fini(rosidl_dynamic_typesupport_serialization_support_imp
 }
 
 
-char *
-fastrtps__dynamic_type_get_name(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
+const char *
+fastrtps__dynamic_type_get_name(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl, size_t * name_length)
 {
   (void)serialization_support_impl;
   auto type = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
-  return strdup(type->get_name().c_str());
+  std::string name = type->get_name();
+  *name_length = name.size();
+  return strdup(name.c_str());
 }
 
 
-char *
-fastrtps__dynamic_type_builder_get_name(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)
+const char *
+fastrtps__dynamic_type_builder_get_name(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl, size_t * name_length)
 {
   (void)serialization_support_impl;
-  return strdup(static_cast<const DynamicTypeBuilder *>(type_builder_impl->handle)->get_name().c_str());
+  std::string name = static_cast<const DynamicTypeBuilder *>(type_builder_impl->handle)->get_name();
+  *name_length = name.size();
+  return strdup(name.c_str());
 }
 
 

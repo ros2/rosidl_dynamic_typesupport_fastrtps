@@ -137,6 +137,16 @@ fastrtps__dynamic_data_print(rosidl_dynamic_typesupport_serialization_support_im
 }
 
 
+const char *
+fastrtps__dynamic_data_get_name(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t * name_length)
+{
+  (void) serialization_support_impl;
+  std::string name = static_cast<DynamicData *>(data_impl->handle)->get_name();
+  *name_length = name.size();
+  return strdup(name.c_str());
+}
+
+
 // DYNAMIC DATA CONSTRUCTION =======================================================================
 rosidl_dynamic_typesupport_dynamic_data_impl_t *
 fastrtps__dynamic_data_init_from_dynamic_type_builder(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)

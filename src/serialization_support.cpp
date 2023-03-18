@@ -116,11 +116,11 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     fastrtps__dynamic_type_fini;
 
   serialization_support_interface->dynamic_type_get_name =
-    (char * (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_type_impl_t *))
+    (const char * (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_type_impl_t *, size_t *))
     fastrtps__dynamic_type_get_name;
 
   serialization_support_interface->dynamic_type_builder_get_name =
-    (char * (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *))
+    (const char * (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, size_t *))
     fastrtps__dynamic_type_builder_get_name;
 
   serialization_support_interface->dynamic_type_builder_set_name =
@@ -508,6 +508,10 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
   serialization_support_interface->dynamic_data_print =
     (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *))
     fastrtps__dynamic_data_print;
+
+  serialization_support_interface->dynamic_data_get_name =
+    (const char * (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_data_impl_t *, size_t *))
+    fastrtps__dynamic_data_get_name;
 
 
   // DYNAMIC DATA CONSTRUCTION

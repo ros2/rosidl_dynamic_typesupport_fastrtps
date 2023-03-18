@@ -70,6 +70,9 @@ fastrtps__dynamic_data_return_loaned_value(rosidl_dynamic_typesupport_serializat
 void
 fastrtps__dynamic_data_print(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);
 
+const char *
+fastrtps__dynamic_data_get_name(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t * name_length);
+
 
 // DYNAMIC DATA CONSTRUCTION =======================================================================
 rosidl_dynamic_typesupport_dynamic_data_impl_t *
