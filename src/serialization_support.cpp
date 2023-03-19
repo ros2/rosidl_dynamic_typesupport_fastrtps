@@ -15,9 +15,9 @@
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 #include <rosidl_dynamic_typesupport/types.h>
 
-#include "detail/dynamic_data.h"
-#include "detail/dynamic_type.h"
-#include "detail/serialization_support_impl_handle.h"
+#include "detail/fastrtps_dynamic_data.h"
+#include "detail/fastrtps_dynamic_type.h"
+#include "detail/fastrtps_serialization_support_impl_handle.h"
 
 #include <rcutils/types/uint8_array.h>
 #include <rosidl_dynamic_typesupport_fastrtps/identifier.h>
@@ -506,7 +506,7 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     fastrtps__dynamic_data_return_loaned_value;
 
   serialization_support_interface->dynamic_data_print =
-    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *))
+    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_data_impl_t *))
     fastrtps__dynamic_data_print;
 
   serialization_support_interface->dynamic_data_get_name =

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__DYNAMIC_DATA_H_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__DYNAMIC_DATA_H_
+#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_H_
+#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_H_
 
 #include <wchar.h>
 #include <rcutils/types/uint8_array.h>
@@ -55,9 +55,6 @@ rosidl_dynamic_typesupport_member_id_t
 fastrtps__dynamic_data_get_member_id_at_index(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t index);
 
 rosidl_dynamic_typesupport_member_id_t
-fastrtps__dynamic_data_get_member_id_at_index(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t index);
-
-rosidl_dynamic_typesupport_member_id_t
 fastrtps__dynamic_data_get_array_index(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t index);
 
 rosidl_dynamic_typesupport_dynamic_data_impl_t *
@@ -68,7 +65,7 @@ void
 fastrtps__dynamic_data_return_loaned_value(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * inner_data_impl);
 
 void
-fastrtps__dynamic_data_print(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);
+fastrtps__dynamic_data_print(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);
 
 const char *
 fastrtps__dynamic_data_get_name(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t * name_length);
@@ -344,4 +341,4 @@ fastrtps__dynamic_data_insert_complex_value_ptr(
 }
 #endif
 
-#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__DYNAMIC_DATA_H_
+#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_H_

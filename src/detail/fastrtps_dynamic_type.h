@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__DYNAMIC_TYPE_H_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__DYNAMIC_TYPE_H_
+#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_TYPE_H_
+#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_TYPE_H_
 
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 
@@ -453,4 +453,4 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member(
 }
 #endif
 
-#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__DYNAMIC_TYPE_H_
+#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_TYPE_H_

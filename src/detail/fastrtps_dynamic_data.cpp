@@ -21,8 +21,8 @@
 #include <fastrtps/types/DynamicPubSubType.h>
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 
-#include "dynamic_data.h"
-#include "serialization_support_impl_handle.h"
+#include "fastrtps_dynamic_data.h"
+#include "fastrtps_serialization_support_impl_handle.h"
 #include "utils.hpp"
 
 #include <rcutils/types/rcutils_ret.h>
@@ -130,10 +130,10 @@ fastrtps__dynamic_data_return_loaned_value(
 
 
 void
-fastrtps__dynamic_data_print(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
+fastrtps__dynamic_data_print(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
   (void) serialization_support_impl;
-  DynamicDataHelper::print(static_cast<DynamicData *>(data_impl->handle));
+  DynamicDataHelper::print(static_cast<const DynamicData *>(data_impl->handle));
 }
 
 

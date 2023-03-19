@@ -20,8 +20,8 @@
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 #include <fastrtps/types/TypeDescriptor.h>
 
-#include "dynamic_type.h"
-#include "serialization_support_impl_handle.h"
+#include "fastrtps_dynamic_type.h"
+#include "fastrtps_serialization_support_impl_handle.h"
 #include "utils.hpp"
 
 #include <rosidl_runtime_c/type_description/field__functions.h>

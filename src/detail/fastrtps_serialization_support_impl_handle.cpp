@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
-#include "serialization_support_impl_handle.h"
+#include "fastrtps_serialization_support_impl_handle.h"
 
 
 void
