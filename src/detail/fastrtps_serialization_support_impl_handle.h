@@ -33,7 +33,8 @@ typedef struct fastrtps__serialization_support_impl_handle_s
 } fastrtps__serialization_support_impl_handle_t;
 
 void
-fastrtps__serialization_support_impl_handle_fini(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);
+fastrtps__serialization_support_impl_handle_fini(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);
 
 
 #ifdef __cplusplus

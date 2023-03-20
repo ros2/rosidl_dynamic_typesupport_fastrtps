@@ -17,7 +17,8 @@
 
 
 void
-fastrtps__serialization_support_impl_handle_fini(rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl)
+fastrtps__serialization_support_impl_handle_fini(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl)
 {
   auto fastrtps_serialization_support_handle =
     static_cast<fastrtps__serialization_support_impl_handle_t *>(serialization_support_impl->handle);
