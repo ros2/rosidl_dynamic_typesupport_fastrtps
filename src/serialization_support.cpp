@@ -611,6 +611,14 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t, wchar_t **, size_t *))
     fastrtps__dynamic_data_get_wstring_value;
 
+  serialization_support_interface->dynamic_data_get_bounded_string_value =
+    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t, char **, size_t *, size_t))
+    fastrtps__dynamic_data_get_bounded_string_value;
+
+  serialization_support_interface->dynamic_data_get_bounded_wstring_value =
+    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, const rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t, wchar_t **, size_t *, size_t))
+    fastrtps__dynamic_data_get_bounded_wstring_value;
+
 
   // DYNAMIC DATA PRIMITIVE MEMBER SETTERS
   serialization_support_interface->dynamic_data_set_bool_value =
@@ -680,6 +688,14 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
   serialization_support_interface->dynamic_data_set_wstring_value =
     (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t, const wchar_t *, size_t))
     fastrtps__dynamic_data_set_wstring_value;
+
+  serialization_support_interface->dynamic_data_set_bounded_string_value =
+    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t, const char *, size_t, size_t))
+    fastrtps__dynamic_data_set_bounded_string_value;
+
+  serialization_support_interface->dynamic_data_set_bounded_wstring_value =
+    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t, const wchar_t *, size_t, size_t))
+    fastrtps__dynamic_data_set_bounded_wstring_value;
 
 
   // DYNAMIC TYPE SEQUENCES
@@ -762,6 +778,14 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
   serialization_support_interface->dynamic_data_insert_wstring_value =
     (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, const wchar_t *, size_t, rosidl_dynamic_typesupport_member_id_t *))
     fastrtps__dynamic_data_insert_wstring_value;
+
+  serialization_support_interface->dynamic_data_insert_bounded_string_value =
+    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, const char *, size_t, size_t, rosidl_dynamic_typesupport_member_id_t *))
+    fastrtps__dynamic_data_insert_bounded_string_value;
+
+  serialization_support_interface->dynamic_data_insert_bounded_wstring_value =
+    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, const wchar_t *, size_t, size_t, rosidl_dynamic_typesupport_member_id_t *))
+    fastrtps__dynamic_data_insert_bounded_wstring_value;
 
 
   // DYNAMIC TYPE NESTED

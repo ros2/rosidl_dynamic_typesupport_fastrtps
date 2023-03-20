@@ -163,6 +163,15 @@ fastrtps__dynamic_data_get_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_member_id_t id, wchar_t ** value, size_t * value_length);
 
+void
+fastrtps__dynamic_data_get_bounded_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_member_id_t id, char ** value, size_t * value_length, size_t string_bound);
+
+void
+fastrtps__dynamic_data_get_bounded_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_member_id_t id, wchar_t ** value, size_t * value_length, size_t wstring_bound);
+
 
 // DYNAMIC DATA PRIMITIVE MEMBERS SETTERS ==========================================================
 void
@@ -232,6 +241,14 @@ fastrtps__dynamic_data_set_string_value(
 void
 fastrtps__dynamic_data_set_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_member_id_t id, const wchar_t * value, size_t value_length);
+
+void
+fastrtps__dynamic_data_set_bounded_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_member_id_t id, const char * value, size_t value_length, size_t string_bound);
+
+void
+fastrtps__dynamic_data_set_bounded_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_member_id_t id, const wchar_t * value, size_t value_length, size_t wstring_bound);
 
 
 // DYNAMIC DATA SEQUENCES ==========================================================================
@@ -313,6 +330,14 @@ fastrtps__dynamic_data_insert_string_value(
 void
 fastrtps__dynamic_data_insert_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const wchar_t * value, size_t value_length, rosidl_dynamic_typesupport_member_id_t * out_id);
+
+void
+fastrtps__dynamic_data_insert_bounded_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * value, size_t value_length, size_t string_bound, rosidl_dynamic_typesupport_member_id_t * out_id);
+
+void
+fastrtps__dynamic_data_insert_bounded_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const wchar_t * value, size_t value_length, size_t wstring_bound, rosidl_dynamic_typesupport_member_id_t * out_id);
 
 
 // DYNAMIC DATA NESTED MEMBERS =====================================================================
