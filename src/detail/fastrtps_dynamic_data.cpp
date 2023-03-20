@@ -903,7 +903,7 @@ fastrtps__dynamic_data_set_complex_value(
 
 
 void
-fastrtps__dynamic_data_insert_const_complex_value(
+fastrtps__dynamic_data_insert_complex_value_copy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const rosidl_dynamic_typesupport_dynamic_data_impl_t * value, rosidl_dynamic_typesupport_member_id_t * out_id)
 {
   (void) serialization_support_impl;
@@ -916,18 +916,6 @@ fastrtps__dynamic_data_insert_const_complex_value(
 
 void
 fastrtps__dynamic_data_insert_complex_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * value, rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_complex_value(
-    static_cast<DynamicData *>(value->handle), tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_complex_value_ptr(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rosidl_dynamic_typesupport_dynamic_data_impl_t * value, rosidl_dynamic_typesupport_member_id_t * out_id)
 {
   (void) serialization_support_impl;

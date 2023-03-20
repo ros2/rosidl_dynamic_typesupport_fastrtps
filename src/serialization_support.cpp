@@ -797,17 +797,13 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t, rosidl_dynamic_typesupport_dynamic_data_impl_t *))
     fastrtps__dynamic_data_set_complex_value;
 
-  serialization_support_interface->dynamic_data_insert_const_complex_value =
+  serialization_support_interface->dynamic_data_insert_complex_value_copy =
     (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, const rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t *))
-    fastrtps__dynamic_data_insert_const_complex_value;
+    fastrtps__dynamic_data_insert_complex_value_copy;
 
   serialization_support_interface->dynamic_data_insert_complex_value =
     (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t *))
     fastrtps__dynamic_data_insert_complex_value;
-
-  serialization_support_interface->dynamic_data_insert_complex_value_ptr =
-    (void (*)(rosidl_dynamic_typesupport_serialization_support_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_dynamic_data_impl_t *, rosidl_dynamic_typesupport_member_id_t *))
-    fastrtps__dynamic_data_insert_complex_value_ptr;
 
 
   return serialization_support_interface;
