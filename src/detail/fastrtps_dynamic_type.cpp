@@ -162,6 +162,10 @@ fastrtps__dynamic_type_clone(
   auto type = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
 
+  // Disgusting, but unavoidable... (we can't easily transfer ownership)
+  //
+  // We're forcing the managed pointer to persist outside of function scope by moving ownership
+  // to a new, heap-allocated DynamicType_ptr (which is a shared_ptr)
   return new rosidl_dynamic_typesupport_dynamic_type_impl_t{
     static_cast<void *>(
       new DynamicType_ptr(
@@ -1352,8 +1356,7 @@ fastrtps__dynamic_type_builder_add_int8_bounded_sequence_member(
   fastrtps__dynamic_type_builder_add_byte_bounded_sequence_member(
     serialization_support_impl,
     type_builder_impl, id, name,
-    name_length, fastrtps__size_t_to_uint32_t(
-      sequence_bound));
+    name_length, fastrtps__size_t_to_uint32_t(sequence_bound));
 }
 
 
@@ -1369,8 +1372,7 @@ fastrtps__dynamic_type_builder_add_uint8_bounded_sequence_member(
   fastrtps__dynamic_type_builder_add_byte_bounded_sequence_member(
     serialization_support_impl,
     type_builder_impl, id, name,
-    name_length, fastrtps__size_t_to_uint32_t(
-      sequence_bound));
+    name_length, fastrtps__size_t_to_uint32_t(sequence_bound));
 }
 
 

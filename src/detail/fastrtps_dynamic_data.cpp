@@ -13,8 +13,10 @@
 // limitations under the License.
 
 #include <algorithm>
+#include <codecvt>
 #include <cstring>
 #include <cwchar>
+#include <locale>
 
 #include <fastdds/rtps/common/SerializedPayload.h>
 
@@ -37,6 +39,44 @@ using eprosima::fastrtps::types::DynamicDataHelper;
 
 using eprosima::fastrtps::types::DynamicTypeBuilder;
 using eprosima::fastrtps::types::DynamicTypeBuilder_ptr;
+
+
+inline char16_t * fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
+{
+  if (dest == NULL) {
+    return NULL;
+  }
+  char16_t * out = dest;
+  while (*src && n--) {
+    *dest = *src;
+    dest++;
+    src++;
+  }
+  *dest = '\0';
+  return out;
+}
+
+
+inline std::wstring fastrtps__u16string_to_wstring(const std::u16string & u16str)
+{
+  std::wstring wstr;
+  wstr.resize(u16str.size());
+  for (size_t i = 0; i < u16str.size(); ++i) {
+    wstr[i] = static_cast<wchar_t>(u16str[i]);
+  }
+  return wstr;
+}
+
+
+inline std::u16string fastrtps__wstring_to_u16string(const std::wstring & wstr)
+{
+  std::u16string u16str;
+  u16str.resize(wstr.size());
+  for (size_t i = 0; i < wstr.size(); ++i) {
+    u16str[i] = static_cast<wchar_t>(wstr[i]);
+  }
+  return u16str;
+}
 
 
 // =================================================================================================
@@ -123,7 +163,7 @@ fastrtps__dynamic_data_get_member_id_at_index(
 rosidl_dynamic_typesupport_member_id_t
 fastrtps__dynamic_data_get_array_index(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t index)
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t index)
 {
   (void) serialization_support_impl;
   return static_cast<DynamicData *>(data_impl->handle)->get_array_index(
@@ -138,8 +178,8 @@ fastrtps__dynamic_data_loan_value(
   rosidl_dynamic_typesupport_member_id_t id)
 {
   (void) serialization_support_impl;
-  return new rosidl_dynamic_typesupport_dynamic_data_impl_t{std::move(static_cast<DynamicData *>(
-        data_impl->handle)->loan_value(id))};
+  return new rosidl_dynamic_typesupport_dynamic_data_impl_t{std::move(
+      static_cast<DynamicData *>(data_impl->handle)->loan_value(id))};
 }
 
 
@@ -151,7 +191,7 @@ fastrtps__dynamic_data_return_loaned_value(
 {
   (void) serialization_support_impl;
   static_cast<DynamicData *>(data_impl->handle)
-  ->return_loaned_value(static_cast<const DynamicData *>(inner_data_impl->handle));
+    ->return_loaned_value(static_cast<const DynamicData *>(inner_data_impl->handle));
 }
 
 
@@ -318,7 +358,7 @@ void
 fastrtps__dynamic_data_get_byte_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint8_t * value)
+  rosidl_dynamic_typesupport_member_id_t id, unsigned char * value)
 {
   (void) serialization_support_impl;
   static_cast<const DynamicData *>(data_impl->handle)->get_byte_value(*value, id);
@@ -340,10 +380,12 @@ void
 fastrtps__dynamic_data_get_wchar_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, wchar_t * value)
+  rosidl_dynamic_typesupport_member_id_t id, char16_t * value)
 {
   (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_char16_value(*value, id);
+  wchar_t out;
+  static_cast<const DynamicData *>(data_impl->handle)->get_char16_value(out, id);
+  *value = static_cast<char16_t>(out);
 }
 
 
@@ -476,8 +518,9 @@ fastrtps__dynamic_data_get_string_value(
   (void) serialization_support_impl;
   std::string tmp_string;
   static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);  // Lifetime is in the data_impl obj
+
   *value_length = tmp_string.size();
-  char * out = new char[*value_length + 1];  // NOTE(methylDragon): Can I assume the str is always null terminated?
+  char * out = new char[*value_length + 1];
   strncpy(out, tmp_string.c_str(), *value_length);
   out[*value_length] = '\0';
   *value = out;
@@ -488,14 +531,15 @@ void
 fastrtps__dynamic_data_get_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, wchar_t ** value, size_t * value_length)
+  rosidl_dynamic_typesupport_member_id_t id, char16_t ** value, size_t * value_length)
 {
   (void) serialization_support_impl;
   std::wstring tmp_wstring;
   static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id);
+
   *value_length = tmp_wstring.size();
-  wchar_t * out = new wchar_t[*value_length + 1];  // NOTE(methylDragon): Can I assume the str is always null terminated?
-  wcsncpy(out, tmp_wstring.c_str(), *value_length);
+  char16_t * out = new char16_t[*value_length + 1];
+  fastrtps__ucsncpy(out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
   out[*value_length] = '\0';
   *value = out;
 }
@@ -511,8 +555,9 @@ fastrtps__dynamic_data_get_bounded_string_value(
   (void) serialization_support_impl;
   std::string tmp_string;
   static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);  // Lifetime is in the data_impl obj
+
   *value_length = std::min(tmp_string.size(), string_bound);
-  char * out = new char[*value_length + 1];  // NOTE(methylDragon): Can I assume the str is always null terminated?
+  char * out = new char[*value_length + 1];
   strncpy(out, tmp_string.c_str(), *value_length);
   out[*value_length] = '\0';
   *value = out;
@@ -523,15 +568,16 @@ void
 fastrtps__dynamic_data_get_bounded_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, wchar_t ** value, size_t * value_length,
+  rosidl_dynamic_typesupport_member_id_t id, char16_t ** value, size_t * value_length,
   size_t wstring_bound)
 {
   (void) serialization_support_impl;
   std::wstring tmp_wstring;
   static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id);
+
   *value_length = std::min(tmp_wstring.size(), wstring_bound);
-  wchar_t * out = new wchar_t[*value_length + 1];  // NOTE(methylDragon): Can I assume the str is always null terminated?
-  wcsncpy(out, tmp_wstring.c_str(), *value_length);
+  char16_t * out = new char16_t[*value_length + 1];
+  fastrtps__ucsncpy(out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
   out[*value_length] = '\0';
   *value = out;
 }
@@ -575,7 +621,7 @@ void
 fastrtps__dynamic_data_set_wchar_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, wchar_t value)
+  rosidl_dynamic_typesupport_member_id_t id, char16_t value)
 {
   (void) serialization_support_impl;
   static_cast<DynamicData *>(data_impl->handle)->set_char16_value(value, id);
@@ -710,10 +756,9 @@ fastrtps__dynamic_data_set_string_value(
   rosidl_dynamic_typesupport_member_id_t id, const char * value, size_t value_length)
 {
   (void) serialization_support_impl;
-  const std::string tmp_string(value);
+  const std::string tmp_string(value, value_length);
   // TODO(methylDragon): Check for dealloc
-  static_cast<DynamicData *>(data_impl->handle)->set_string_value(std::string(tmp_string,
-    value_length), id);
+  static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
 }
 
 
@@ -721,13 +766,13 @@ void
 fastrtps__dynamic_data_set_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, const wchar_t * value, size_t value_length)
+  rosidl_dynamic_typesupport_member_id_t id, const char16_t * value, size_t value_length)
 {
   (void) serialization_support_impl;
-  const std::wstring tmp_wstring(value);
+  const std::u16string tmp_u16string(value, value_length);
   // TODO(methylDragon): Check for dealloc
-  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(std::wstring(tmp_wstring,
-    value_length), id);
+  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
+    fastrtps__u16string_to_wstring(tmp_u16string), id);
 }
 
 
@@ -739,10 +784,9 @@ fastrtps__dynamic_data_set_bounded_string_value(
   size_t string_bound)
 {
   (void) serialization_support_impl;
-  const std::string tmp_string(value);
+  const std::string tmp_string(value, std::min(value_length, string_bound));
   // TODO(methylDragon): Check for dealloc
-  static_cast<DynamicData *>(data_impl->handle)->set_string_value(std::string(tmp_string,
-    std::min(value_length, string_bound)), id);
+  static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
 }
 
 
@@ -750,14 +794,14 @@ void
 fastrtps__dynamic_data_set_bounded_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, const wchar_t * value, size_t value_length,
+  rosidl_dynamic_typesupport_member_id_t id, const char16_t * value, size_t value_length,
   size_t wstring_bound)
 {
   (void) serialization_support_impl;
-  const std::wstring tmp_wstring(value);
+  const std::u16string tmp_u16string(value, std::min(value_length, wstring_bound));
   // TODO(methylDragon): Check for dealloc
-  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(std::wstring(tmp_wstring,
-    std::min(value_length, wstring_bound)), id);
+  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
+    fastrtps__u16string_to_wstring(tmp_u16string), id);
 }
 
 
@@ -838,7 +882,7 @@ fastrtps__dynamic_data_insert_char_value(
 void
 fastrtps__dynamic_data_insert_wchar_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, wchar_t value,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, char16_t value,
   rosidl_dynamic_typesupport_member_id_t * out_id)
 {
   (void) serialization_support_impl;
@@ -1001,9 +1045,8 @@ fastrtps__dynamic_data_insert_string_value(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(std::string(value,
-    value_length),
-    tmp_id);
+  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
+    std::string(value, value_length), tmp_id);
   *out_id = tmp_id;
 }
 
@@ -1011,14 +1054,15 @@ fastrtps__dynamic_data_insert_string_value(
 void
 fastrtps__dynamic_data_insert_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const wchar_t * value,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  const char16_t * value,
   size_t value_length,
   rosidl_dynamic_typesupport_member_id_t * out_id)
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(std::wstring(value,
-    value_length), tmp_id);
+  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
+    fastrtps__u16string_to_wstring(std::u16string(value, value_length)), tmp_id);
   *out_id = tmp_id;
 }
 
@@ -1031,8 +1075,8 @@ fastrtps__dynamic_data_insert_bounded_string_value(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(std::string(value,
-    std::min(value_length, string_bound)), tmp_id);
+  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
+    std::string(value, std::min(value_length, string_bound)), tmp_id);
   *out_id = tmp_id;
 }
 
@@ -1040,14 +1084,15 @@ fastrtps__dynamic_data_insert_bounded_string_value(
 void
 fastrtps__dynamic_data_insert_bounded_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const wchar_t * value,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char16_t * value,
   size_t value_length, size_t wstring_bound,
   rosidl_dynamic_typesupport_member_id_t * out_id)
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(std::wstring(value,
-    std::min(value_length, wstring_bound)), tmp_id);
+  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
+    fastrtps__u16string_to_wstring(std::u16string(value, std::min(value_length, wstring_bound))),
+    tmp_id);
   *out_id = tmp_id;
 }
 
