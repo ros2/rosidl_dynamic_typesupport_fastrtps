@@ -100,8 +100,11 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       rosidl_dynamic_typesupport_serialization_support_impl_t *, const char *, size_t))
     fastrtps__dynamic_type_builder_init;
 
-  // NOTE(methylDragon): Delegated to rosidl_dynamic_typesupport interface library
-  serialization_support_interface->dynamic_type_builder_init_from_description = NULL;
+  serialization_support_interface->dynamic_type_builder_init_from_description =
+  (rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * (*)(
+    rosidl_dynamic_typesupport_serialization_support_impl_t *,
+    const rosidl_runtime_c__type_description__TypeDescription *))
+  fastrtps__dynamic_type_builder_init_from_description;
 
   serialization_support_interface->dynamic_type_builder_clone =
     (rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * (*)(
@@ -810,6 +813,45 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       const char *, size_t,
       rosidl_dynamic_typesupport_dynamic_type_impl_t *, size_t))
     fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member;
+
+
+    serialization_support_interface->dynamic_type_builder_add_complex_member_builder =
+      (void (*)(
+        rosidl_dynamic_typesupport_serialization_support_impl_t *,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+        rosidl_dynamic_typesupport_member_id_t,
+        const char *, size_t,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *))
+      fastrtps__dynamic_type_builder_add_complex_member_builder;
+
+    serialization_support_interface->dynamic_type_builder_add_complex_array_member_builder =
+      (void (*)(
+        rosidl_dynamic_typesupport_serialization_support_impl_t *,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+        rosidl_dynamic_typesupport_member_id_t,
+        const char *, size_t,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, size_t))
+      fastrtps__dynamic_type_builder_add_complex_array_member_builder;
+
+    serialization_support_interface
+      ->dynamic_type_builder_add_complex_unbounded_sequence_member_builder =
+      (void (*)(
+        rosidl_dynamic_typesupport_serialization_support_impl_t *,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+        rosidl_dynamic_typesupport_member_id_t,
+        const char *, size_t,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *))
+      fastrtps__dynamic_type_builder_add_complex_unbounded_sequence_member_builder;
+
+    serialization_support_interface
+      ->dynamic_type_builder_add_complex_bounded_sequence_member_builder =
+      (void (*)(
+        rosidl_dynamic_typesupport_serialization_support_impl_t *,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+        rosidl_dynamic_typesupport_member_id_t,
+        const char *, size_t,
+        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, size_t))
+      fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member_builder;
 
   // ===============================================================================================
   // DYNAMIC DATA METHODS

@@ -46,8 +46,11 @@ fastrtps__dynamic_type_builder_init(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const char * name, size_t name_length);
 
-// NOTE(methylDragon): Delegated to rosidl_dynamic_typesupport interface library
-// fastrtps__dynamic_type_builder_init_from_description
+// NOTE(methylDragon): We don't delegate this because we need to do string replacement
+rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *
+fastrtps__dynamic_type_builder_init_from_description(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  const rosidl_runtime_c__type_description__TypeDescription * description);
 
 rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *
 fastrtps__dynamic_type_builder_clone(
@@ -629,6 +632,36 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member(
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
   rosidl_dynamic_typesupport_member_id_t id, const char * name, size_t name_length,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * nested_struct, size_t sequence_bound);
+
+void
+fastrtps__dynamic_type_builder_add_complex_member_builder(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char * name, size_t name_length,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * nested_struct_builder);
+
+void
+fastrtps__dynamic_type_builder_add_complex_array_member_builder(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char * name, size_t name_length,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * nested_struct_builder,
+  size_t array_length);
+
+void
+fastrtps__dynamic_type_builder_add_complex_unbounded_sequence_member_builder(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char * name, size_t name_length,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * nested_struct_builder);
+
+void
+fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member_builder(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char * name, size_t name_length,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * nested_struct_builder,
+  size_t sequence_bound);
 
 
 #ifdef __cplusplus

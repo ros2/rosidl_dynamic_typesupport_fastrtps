@@ -330,8 +330,8 @@ fastrtps__dynamic_data_deserialize(
 
   auto m_type = std::make_shared<eprosima::fastrtps::types::DynamicPubSubType>();
 
-  // This copies!
-  if (m_type->deserialize(payload.get(), data_impl->handle)) {  // Deserializes payload into dyn_data
+  // Deserializes payload into dynamic data. This copies!
+  if (m_type->deserialize(payload.get(), data_impl->handle)) {
     payload->data = nullptr;  // Data gets freed on buffer fini outside
     return true;
   } else {
