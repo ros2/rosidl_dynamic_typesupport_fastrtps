@@ -20,6 +20,7 @@
 #include "detail/fastrtps_serialization_support_impl_handle.h"
 
 #include <rcutils/types/uint8_array.h>
+#include <rcutils/allocator.h>
 #include <rosidl_dynamic_typesupport_fastrtps/identifier.h>
 #include <rosidl_dynamic_typesupport_fastrtps/serialization_support.h>
 
@@ -33,15 +34,16 @@
 rosidl_dynamic_typesupport_serialization_support_impl_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl()
 {
+  rcutils_allocator_t allocator = rcutils_get_default_allocator();
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl =
-    (rosidl_dynamic_typesupport_serialization_support_impl_t *) calloc(
-    1, sizeof(rosidl_dynamic_typesupport_serialization_support_impl_t));
+    (rosidl_dynamic_typesupport_serialization_support_impl_t *) allocator.zero_allocate(
+    1, sizeof(rosidl_dynamic_typesupport_serialization_support_impl_t), &allocator.state);
   serialization_support_impl->library_identifier =
     fastrtps_serialization_support_library_identifier;
 
   fastrtps__serialization_support_impl_handle_t * serialization_support_impl_handle =
-    (fastrtps__serialization_support_impl_handle_t *) calloc(
-    1, sizeof(fastrtps__serialization_support_impl_handle_t));
+    (fastrtps__serialization_support_impl_handle_t *) allocator.zero_allocate(
+    1, sizeof(fastrtps__serialization_support_impl_handle_t), &allocator.state);
 
   // The actual business
   serialization_support_impl_handle->type_factory_ =
@@ -61,9 +63,10 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl()
 rosidl_dynamic_typesupport_serialization_support_interface_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 {
+  rcutils_allocator_t allocator = rcutils_get_default_allocator();
   rosidl_dynamic_typesupport_serialization_support_interface_t * serialization_support_interface =
-    (rosidl_dynamic_typesupport_serialization_support_interface_t *) calloc(
-    1, sizeof(rosidl_dynamic_typesupport_serialization_support_interface_t));
+    (rosidl_dynamic_typesupport_serialization_support_interface_t *) allocator.zero_allocate(
+    1, sizeof(rosidl_dynamic_typesupport_serialization_support_interface_t), &allocator.state);
 
 
   // CORE ==========================================================================================
@@ -151,14 +154,14 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
   // DYNAMIC TYPE PRIMITIVE MEMBERS ================================================================
   #define FASTRTPS_SERIALIZATION_SUPPORT_ADD_MEMBER_FN(FnName) \
-    serialization_support_interface-> FnName = \
-      (void (*)( \
-        rosidl_dynamic_typesupport_serialization_support_impl_t *, \
-        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
-        rosidl_dynamic_typesupport_member_id_t, \
-        const char *, size_t, \
-        const char *, size_t)) \
-      fastrtps__ ## FnName ;
+  serialization_support_interface->FnName = \
+    (void (*)( \
+      rosidl_dynamic_typesupport_serialization_support_impl_t *, \
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
+      rosidl_dynamic_typesupport_member_id_t, \
+      const char *, size_t, \
+      const char *, size_t)) \
+    fastrtps__ ## FnName;
 
   FASTRTPS_SERIALIZATION_SUPPORT_ADD_MEMBER_FN(dynamic_type_builder_add_bool_member);
   FASTRTPS_SERIALIZATION_SUPPORT_ADD_MEMBER_FN(dynamic_type_builder_add_byte_member);
@@ -201,14 +204,14 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
   // DYNAMIC TYPE STATIC ARRAY MEMBERS =============================================================
   #define FASTRTPS_SERIALIZATION_SUPPORT_ADD_ARRAY_MEMBER_FN(FnName) \
-    serialization_support_interface-> FnName = \
-      (void (*)( \
-        rosidl_dynamic_typesupport_serialization_support_impl_t *, \
-        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
-        rosidl_dynamic_typesupport_member_id_t, \
-        const char *, size_t, \
-        const char *, size_t, size_t)) \
-      fastrtps__ ## FnName ;
+  serialization_support_interface->FnName = \
+    (void (*)( \
+      rosidl_dynamic_typesupport_serialization_support_impl_t *, \
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
+      rosidl_dynamic_typesupport_member_id_t, \
+      const char *, size_t, \
+      const char *, size_t, size_t)) \
+    fastrtps__ ## FnName;
 
   FASTRTPS_SERIALIZATION_SUPPORT_ADD_ARRAY_MEMBER_FN(
     dynamic_type_builder_add_bool_array_member);
@@ -268,14 +271,14 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
   // DYNAMIC TYPE UNBOUNDED SEQUENCE MEMBERS =======================================================
   #define FASTRTPS_SERIALIZATION_SUPPORT_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(FnName) \
-    serialization_support_interface-> FnName = \
-      (void (*)( \
-        rosidl_dynamic_typesupport_serialization_support_impl_t *, \
-        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
-        rosidl_dynamic_typesupport_member_id_t, \
-        const char *, size_t, \
-        const char *, size_t)) \
-      fastrtps__ ## FnName ;
+  serialization_support_interface->FnName = \
+    (void (*)( \
+      rosidl_dynamic_typesupport_serialization_support_impl_t *, \
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
+      rosidl_dynamic_typesupport_member_id_t, \
+      const char *, size_t, \
+      const char *, size_t)) \
+    fastrtps__ ## FnName;
 
   FASTRTPS_SERIALIZATION_SUPPORT_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(
     dynamic_type_builder_add_bool_unbounded_sequence_member);
@@ -337,14 +340,14 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
   // DYNAMIC TYPE BOUNDED SEQUENCE MEMBERS =========================================================
   #define FASTRTPS_SERIALIZATION_SUPPORT_ADD_BOUNDED_SEQUENCE_MEMBER_FN(FnName) \
-    serialization_support_interface-> FnName = \
-      (void (*)( \
-        rosidl_dynamic_typesupport_serialization_support_impl_t *, \
-        rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
-        rosidl_dynamic_typesupport_member_id_t, \
-        const char *, size_t, \
-        const char *, size_t, size_t)) \
-      fastrtps__ ## FnName ;
+  serialization_support_interface->FnName = \
+    (void (*)( \
+      rosidl_dynamic_typesupport_serialization_support_impl_t *, \
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *, \
+      rosidl_dynamic_typesupport_member_id_t, \
+      const char *, size_t, \
+      const char *, size_t, size_t)) \
+    fastrtps__ ## FnName;
 
   FASTRTPS_SERIALIZATION_SUPPORT_ADD_BOUNDED_SEQUENCE_MEMBER_FN(
     dynamic_type_builder_add_bool_bounded_sequence_member);
@@ -466,7 +469,7 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     fastrtps__dynamic_type_builder_add_complex_array_member_builder;
 
   serialization_support_interface
-    ->dynamic_type_builder_add_complex_unbounded_sequence_member_builder =
+  ->dynamic_type_builder_add_complex_unbounded_sequence_member_builder =
     (void (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
@@ -477,7 +480,7 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     fastrtps__dynamic_type_builder_add_complex_unbounded_sequence_member_builder;
 
   serialization_support_interface
-    ->dynamic_type_builder_add_complex_bounded_sequence_member_builder =
+  ->dynamic_type_builder_add_complex_bounded_sequence_member_builder =
     (void (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
@@ -619,13 +622,13 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
   // DYNAMIC DATA PRIMITIVE MEMBER GETTERS =========================================================
   #define FASTRTPS_SERIALIZATION_SUPPORT_GET_VALUE_FN(FnName, ValueT) \
-    serialization_support_interface-> FnName = \
-      (void (*)( \
-        rosidl_dynamic_typesupport_serialization_support_impl_t *, \
-        const rosidl_dynamic_typesupport_dynamic_data_impl_t *, \
-        rosidl_dynamic_typesupport_member_id_t, \
-        ValueT *)) \
-      fastrtps__ ## FnName ;
+  serialization_support_interface->FnName = \
+    (void (*)( \
+      rosidl_dynamic_typesupport_serialization_support_impl_t *, \
+      const rosidl_dynamic_typesupport_dynamic_data_impl_t *, \
+      rosidl_dynamic_typesupport_member_id_t, \
+      ValueT *)) \
+    fastrtps__ ## FnName;
 
   FASTRTPS_SERIALIZATION_SUPPORT_GET_VALUE_FN(dynamic_data_get_bool_value, bool);
   FASTRTPS_SERIALIZATION_SUPPORT_GET_VALUE_FN(dynamic_data_get_byte_value, unsigned char);
@@ -680,13 +683,13 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
   // DYNAMIC DATA PRIMITIVE MEMBER SETTERS =========================================================
   #define FASTRTPS_SERIALIZATION_SUPPORT_SET_VALUE_FN(FnName, ValueT) \
-    serialization_support_interface-> FnName = \
-      (void (*)( \
-        rosidl_dynamic_typesupport_serialization_support_impl_t *, \
-        rosidl_dynamic_typesupport_dynamic_data_impl_t *, \
-        rosidl_dynamic_typesupport_member_id_t, \
-        ValueT )) \
-      fastrtps__ ## FnName ;
+  serialization_support_interface->FnName = \
+    (void (*)( \
+      rosidl_dynamic_typesupport_serialization_support_impl_t *, \
+      rosidl_dynamic_typesupport_dynamic_data_impl_t *, \
+      rosidl_dynamic_typesupport_member_id_t, \
+      ValueT)) \
+    fastrtps__ ## FnName;
 
   FASTRTPS_SERIALIZATION_SUPPORT_SET_VALUE_FN(dynamic_data_set_bool_value, bool);
   FASTRTPS_SERIALIZATION_SUPPORT_SET_VALUE_FN(dynamic_data_set_byte_value, unsigned char);
@@ -761,12 +764,12 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     fastrtps__dynamic_data_insert_sequence_data;
 
   #define FASTRTPS_SERIALIZATION_SUPPORT_INSERT_VALUE_FN(FnName, ValueT) \
-    serialization_support_interface-> FnName = \
-      (void (*)( \
-        rosidl_dynamic_typesupport_serialization_support_impl_t *, \
-        rosidl_dynamic_typesupport_dynamic_data_impl_t *, ValueT, \
-        rosidl_dynamic_typesupport_member_id_t *)) \
-      fastrtps__ ## FnName ;
+  serialization_support_interface->FnName = \
+    (void (*)( \
+      rosidl_dynamic_typesupport_serialization_support_impl_t *, \
+      rosidl_dynamic_typesupport_dynamic_data_impl_t *, ValueT, \
+      rosidl_dynamic_typesupport_member_id_t *)) \
+    fastrtps__ ## FnName;
 
   FASTRTPS_SERIALIZATION_SUPPORT_INSERT_VALUE_FN(dynamic_data_insert_bool_value, bool);
   FASTRTPS_SERIALIZATION_SUPPORT_INSERT_VALUE_FN(dynamic_data_insert_byte_value, unsigned char);

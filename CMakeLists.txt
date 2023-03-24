@@ -23,6 +23,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # DEPS =============================================================================================
 find_package(ament_cmake_ros REQUIRED)
+find_package(rcutils REQUIRED)
 find_package(rosidl_dynamic_typesupport REQUIRED)
 find_package(fastcdr REQUIRED)
 find_package(fastrtps "2.8.0" REQUIRED)
@@ -62,6 +63,7 @@ install(DIRECTORY include/
 ament_export_targets(${PROJECT_NAME}-export HAS_LIBRARY_TARGET)
 ament_export_dependencies(fastcdr)
 ament_export_dependencies(fastrtps)
+ament_export_dependencies(rcutils)
 ament_export_dependencies(rosidl_dynamic_typesupport)
 
 ament_package()
