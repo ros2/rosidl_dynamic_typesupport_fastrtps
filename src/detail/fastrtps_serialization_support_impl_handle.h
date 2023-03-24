@@ -15,11 +15,12 @@
 #ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_H_
 #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_H_
 
+#include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
+
 #include <fastrtps/types/DynamicDataFactory.h>
 #include <fastrtps/types/DynamicTypeBuilderFactory.h>
 
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
-#include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 
 #ifdef __cplusplus
 extern "C" {

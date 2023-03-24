@@ -41,44 +41,6 @@ using eprosima::fastrtps::types::DynamicTypeBuilder;
 using eprosima::fastrtps::types::DynamicTypeBuilder_ptr;
 
 
-inline char16_t * fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
-{
-  if (dest == NULL) {
-    return NULL;
-  }
-  char16_t * out = dest;
-  while (*src && n--) {
-    *dest = *src;
-    dest++;
-    src++;
-  }
-  *dest = '\0';
-  return out;
-}
-
-
-inline std::wstring fastrtps__u16string_to_wstring(const std::u16string & u16str)
-{
-  std::wstring wstr;
-  wstr.resize(u16str.size());
-  for (size_t i = 0; i < u16str.size(); ++i) {
-    wstr[i] = static_cast<wchar_t>(u16str[i]);
-  }
-  return wstr;
-}
-
-
-inline std::u16string fastrtps__wstring_to_u16string(const std::wstring & wstr)
-{
-  std::u16string u16str;
-  u16str.resize(wstr.size());
-  for (size_t i = 0; i < wstr.size(); ++i) {
-    u16str[i] = static_cast<wchar_t>(wstr[i]);
-  }
-  return u16str;
-}
-
-
 // =================================================================================================
 // DYNAMIC DATA
 // =================================================================================================
