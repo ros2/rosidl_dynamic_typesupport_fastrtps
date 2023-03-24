@@ -19,6 +19,7 @@
 #include <fastrtps/types/DynamicTypeBuilderFactory.h>
 
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
+#include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,6 +33,7 @@ typedef struct fastrtps__serialization_support_impl_handle_s
   eprosima::fastrtps::types::DynamicDataFactory * data_factory_;
 } fastrtps__serialization_support_impl_handle_t;
 
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 void
 fastrtps__serialization_support_impl_handle_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);

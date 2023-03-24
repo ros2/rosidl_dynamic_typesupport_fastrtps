@@ -16,6 +16,8 @@
 #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__SERIALIZATION_SUPPORT_H_
 
 #include <rosidl_dynamic_typesupport_fastrtps/identifier.h>
+#include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
+
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 
 #ifdef __cplusplus
@@ -26,9 +28,11 @@ extern "C" {
 /// This is the main file to include
 
 // CORE ============================================================================================
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rosidl_dynamic_typesupport_serialization_support_impl_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl();
 
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rosidl_dynamic_typesupport_serialization_support_interface_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface();
 
