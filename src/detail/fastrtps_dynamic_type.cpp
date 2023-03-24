@@ -45,6 +45,7 @@ using eprosima::fastrtps::types::DynamicTypeBuilder_ptr;
 using eprosima::fastrtps::types::TypeDescriptor;
 
 #define CONTAINER_UNLIMITED 0
+#define EXPAND(x) x
 
 
 // =================================================================================================
@@ -232,253 +233,40 @@ fastrtps__dynamic_type_builder_set_name(
 
 
 // DYNAMIC TYPE PRIMITIVE MEMBERS ==================================================================
-void
-fastrtps__dynamic_type_builder_add_bool_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_bool_type(),
-    std::string(default_value, default_value_length).c_str());
-}
+#define FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(FunctionT, MemberT) \
+  void \
+  fastrtps__dynamic_type_builder_add_ ## FunctionT ## _member( \
+    rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
+    rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl, \
+    rosidl_dynamic_typesupport_member_id_t id, \
+    const char * name, size_t name_length, \
+    const char * default_value, size_t default_value_length) \
+  { \
+    auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>( \
+      serialization_support_impl->handle); \
+    static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
+      id, std::string(name, name_length).c_str(), \
+      fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
+      std::string(default_value, default_value_length).c_str()); \
+  }
 
 
-void
-fastrtps__dynamic_type_builder_add_byte_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_byte_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_char_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_char8_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_wchar_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_char16_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float32_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_float32_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float64_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_float64_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float128_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_float128_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int8_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_byte_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint8_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_byte_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int16_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_int16_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint16_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_uint16_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int32_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_int32_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint32_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_uint32_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int64_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_int64_type(),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint64_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_uint64_type(),
-    std::string(default_value, default_value_length).c_str());
-}
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(bool, bool);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(byte, byte);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(char, char8);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(wchar, char16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(float32, float32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(float64, float64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(float128, float128);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(int8, byte);  // NOTE!!
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(uint8, byte);  // NOTE!!
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(int16, int16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(uint16, uint16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(int32, int32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(uint32, uint32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(int64, int64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN(uint64, uint64);
+#undef FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_MEMBER_FN
 
 
 void
@@ -548,283 +336,43 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_member(
 
 
 // DYNAMIC TYPE STATIC ARRAY MEMBERS ===============================================================
-void
-fastrtps__dynamic_type_builder_add_bool_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_bool_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
+#define FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(FunctionT, MemberT) \
+  void \
+  fastrtps__dynamic_type_builder_add_ ## FunctionT ## _array_member( \
+    rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
+    rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl, \
+    rosidl_dynamic_typesupport_member_id_t id, \
+    const char * name, size_t name_length, \
+    const char * default_value, size_t default_value_length, \
+    size_t array_length) \
+  { \
+    auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>( \
+      serialization_support_impl->handle); \
+    static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
+      id, std::string(name, name_length).c_str(), \
+      fastrtps_impl->type_factory_->create_array_builder( \
+        fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
+        {fastrtps__size_t_to_uint32_t(array_length)}), \
+      std::string(default_value, default_value_length).c_str()); \
+  }
 
 
-void
-fastrtps__dynamic_type_builder_add_byte_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_byte_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_char_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_char8_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_wchar_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_char16_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float32_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_float32_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float64_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_float64_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float128_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_float128_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int8_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  fastrtps__dynamic_type_builder_add_byte_array_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    array_length);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint8_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  fastrtps__dynamic_type_builder_add_byte_array_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    array_length);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int16_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_int16_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint16_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_uint16_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int32_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_int32_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint32_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_uint32_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int64_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_int64_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint64_array_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t array_length)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_uint64_type(), {fastrtps__size_t_to_uint32_t(array_length)}),
-    std::string(default_value, default_value_length).c_str());
-}
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(bool, bool);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(byte, byte);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(char, char8);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(wchar, char16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(float32, float32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(float64, float64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(float128, float128);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(int8, byte);  // NOTE!!
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(uint8, byte);  // NOTE!!
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(int16, int16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(uint16, uint16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(int32, int32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(uint32, uint32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(int64, int64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN(uint64, uint64);
+#undef FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_ARRAY_MEMBER_FN
 
 
 void
@@ -839,8 +387,7 @@ fastrtps__dynamic_type_builder_add_string_array_member(
   fastrtps__dynamic_type_builder_add_bounded_string_array_member(
     serialization_support_impl, type_builder_impl,
     id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED,
-    array_length);
+    CONTAINER_UNLIMITED, array_length);
 }
 
 
@@ -856,8 +403,7 @@ fastrtps__dynamic_type_builder_add_wstring_array_member(
   fastrtps__dynamic_type_builder_add_bounded_wstring_array_member(
     serialization_support_impl, type_builder_impl,
     id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED,
-    array_length);
+    CONTAINER_UNLIMITED, array_length);
 }
 
 
@@ -876,7 +422,8 @@ fastrtps__dynamic_type_builder_add_bounded_string_array_member(
   static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
     id, std::string(name, name_length).c_str(),
     fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_string_type(string_bound), {fastrtps__size_t_to_uint32_t(array_length)}),
+      fastrtps_impl->type_factory_->create_string_type(string_bound),
+      {fastrtps__size_t_to_uint32_t(array_length)}),
     std::string(default_value, default_value_length).c_str());
 }
 
@@ -896,264 +443,49 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_array_member(
   static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
     id, std::string(name, name_length).c_str(),
     fastrtps_impl->type_factory_->create_array_builder(
-      fastrtps_impl->type_factory_->create_wstring_type(wstring_bound), {fastrtps__size_t_to_uint32_t(array_length)}),
+      fastrtps_impl->type_factory_->create_wstring_type(wstring_bound),
+      {fastrtps__size_t_to_uint32_t(array_length)}),
     std::string(default_value, default_value_length).c_str());
 }
 
 
 // DYNAMIC TYPE UNBOUNDED SEQUENCE MEMBERS =========================================================
-void
-fastrtps__dynamic_type_builder_add_bool_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_bool_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
+#define FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(FunctionT) \
+  void \
+  fastrtps__dynamic_type_builder_add_ ## FunctionT ## _unbounded_sequence_member( \
+    rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
+    rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl, \
+    rosidl_dynamic_typesupport_member_id_t id, \
+    const char * name, size_t name_length, \
+    const char * default_value, size_t default_value_length) \
+  { \
+    fastrtps__dynamic_type_builder_add_ ## FunctionT ## _bounded_sequence_member( \
+      serialization_support_impl, type_builder_impl, \
+      id, name, name_length, default_value, default_value_length, \
+      EXPAND(CONTAINER_UNLIMITED)); \
+  }
 
 
-void
-fastrtps__dynamic_type_builder_add_byte_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_byte_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_char_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_char_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_wchar_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_wchar_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float32_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_float32_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float64_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_float64_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float128_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_float128_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int8_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_int8_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-void
-fastrtps__dynamic_type_builder_add_uint8_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_uint8_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int16_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_int16_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint16_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_uint16_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int32_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_int32_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint32_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_uint32_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int64_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_int64_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint64_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_uint64_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_string_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_string_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_wstring_unbounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length)
-{
-  fastrtps__dynamic_type_builder_add_wstring_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    CONTAINER_UNLIMITED);
-}
+// NOTE(methylDragon): These call the bounded sequence versions with "unlimited" bound!
+//                     So the type args are the same!!
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(bool);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(byte);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(char);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(wchar);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(float32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(float64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(float128);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(int8);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(uint8);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(int16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(uint16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(int32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(uint32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(int64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(uint64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(string);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN(wstring);
+#undef FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN
 
 
 void
@@ -1191,289 +523,43 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_unbounded_sequence_member(
 
 
 // DYNAMIC TYPE BOUNDED SEQUENCE MEMBERS ===========================================================
-void
-fastrtps__dynamic_type_builder_add_bool_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_bool_type(), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
+#define FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(FunctionT, MemberT) \
+  void \
+  fastrtps__dynamic_type_builder_add_ ## FunctionT ## _bounded_sequence_member( \
+    rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
+    rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl, \
+    rosidl_dynamic_typesupport_member_id_t id, \
+    const char * name, size_t name_length, \
+    const char * default_value, size_t default_value_length, \
+    size_t sequence_bound) \
+  { \
+    auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>( \
+      serialization_support_impl->handle); \
+    static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
+      id, std::string(name, name_length).c_str(), \
+      fastrtps_impl->type_factory_->create_sequence_builder( \
+        fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
+        {fastrtps__size_t_to_uint32_t(sequence_bound)}), \
+      std::string(default_value, default_value_length).c_str()); \
+  }
 
 
-void
-fastrtps__dynamic_type_builder_add_byte_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_byte_type(), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_char_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_char8_type(), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_wchar_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_char16_type(), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float32_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_float32_type(), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float64_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_float64_type(), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_float128_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_float128_type(), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int8_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  fastrtps__dynamic_type_builder_add_byte_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    fastrtps__size_t_to_uint32_t(sequence_bound));
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint8_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  fastrtps__dynamic_type_builder_add_byte_bounded_sequence_member(
-    serialization_support_impl, type_builder_impl,
-    id, name, name_length, default_value, default_value_length,
-    fastrtps__size_t_to_uint32_t(sequence_bound));
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int16_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_int16_type(),
-      {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint16_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_uint16_type(),
-      {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int32_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_int32_type(),
-      {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint32_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_uint32_type(),
-      {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_int64_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_int64_type(),
-      {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
-
-
-void
-fastrtps__dynamic_type_builder_add_uint64_bounded_sequence_member(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  const char * name, size_t name_length,
-  const char * default_value, size_t default_value_length,
-  size_t sequence_bound)
-{
-  auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-    id, std::string(name, name_length).c_str(),
-    fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_uint64_type(),
-      {fastrtps__size_t_to_uint32_t(sequence_bound)}),
-    std::string(default_value, default_value_length).c_str());
-}
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(bool, bool);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(byte, byte);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(char, char8);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(wchar, char16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(float32, float32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(float64, float64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(float128, float128);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(int8, byte);  // NOTE!!
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(uint8, byte);  // NOTE!!
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(int16, int16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(uint16, uint16);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(int32, int32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(uint32, uint32);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(int64, int64);
+FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN(uint64, uint64);
+#undef FASTRTPS_DYNAMIC_TYPE_BUILDER_ADD_BOUNDED_SEQUENCE_MEMBER_FN
 
 
 void
@@ -1523,7 +609,7 @@ fastrtps__dynamic_type_builder_add_bounded_string_bounded_sequence_member(
   static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
     id, std::string(name, name_length).c_str(),
     fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_string_type( string_bound),
+      fastrtps_impl->type_factory_->create_string_type(string_bound),
       {fastrtps__size_t_to_uint32_t(sequence_bound)}),
     std::string(default_value, default_value_length).c_str());
 }
@@ -1544,7 +630,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_bounded_sequence_member(
   static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
     id, std::string(name, name_length).c_str(),
     fastrtps_impl->type_factory_->create_sequence_builder(
-      fastrtps_impl->type_factory_->create_wstring_type( wstring_bound),
+      fastrtps_impl->type_factory_->create_wstring_type(wstring_bound),
       {fastrtps__size_t_to_uint32_t(sequence_bound)}),
     std::string(default_value, default_value_length).c_str());
 }
@@ -1704,6 +790,7 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member_builder(
   static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
     id, std::string(name, name_length).c_str(),
     fastrtps_impl->type_factory_->create_sequence_builder(
-      static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle), {fastrtps__size_t_to_uint32_t(sequence_bound)}),
+      static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
+      {fastrtps__size_t_to_uint32_t(sequence_bound)}),
     std::string(default_value, default_value_length).c_str());
 }

@@ -102,7 +102,8 @@ fastrtps__dynamic_data_get_item_count(
 rosidl_dynamic_typesupport_member_id_t
 fastrtps__dynamic_data_get_member_id_by_name(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * name,
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  const char * name,
   size_t name_length)
 {
   (void) serialization_support_impl;
@@ -114,7 +115,8 @@ fastrtps__dynamic_data_get_member_id_by_name(
 rosidl_dynamic_typesupport_member_id_t
 fastrtps__dynamic_data_get_member_id_at_index(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t index)
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  size_t index)
 {
   (void) serialization_support_impl;
   return static_cast<const DynamicData *>(data_impl->handle)->get_member_id_at_index(
@@ -125,7 +127,8 @@ fastrtps__dynamic_data_get_member_id_at_index(
 rosidl_dynamic_typesupport_member_id_t
 fastrtps__dynamic_data_get_array_index(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, size_t index)
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  size_t index)
 {
   (void) serialization_support_impl;
   return static_cast<DynamicData *>(data_impl->handle)->get_array_index(
@@ -240,7 +243,8 @@ fastrtps__dynamic_data_fini(
 bool
 fastrtps__dynamic_data_serialize(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rcutils_uint8_array_t * buffer)
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rcutils_uint8_array_t * buffer)
 {
   (void) serialization_support_impl;
   auto m_type = std::make_shared<eprosima::fastrtps::types::DynamicPubSubType>();
@@ -278,7 +282,8 @@ fastrtps__dynamic_data_serialize(
 bool
 fastrtps__dynamic_data_deserialize(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, rcutils_uint8_array_t * buffer)
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rcutils_uint8_array_t * buffer)
 {
   (void) serialization_support_impl;
   auto payload = std::make_shared<eprosima::fastrtps::rtps::SerializedPayload_t>(
@@ -305,39 +310,37 @@ fastrtps__dynamic_data_deserialize(
 
 
 // DYNAMIC DATA PRIMITIVE MEMBER GETTERS ===========================================================
-void
-fastrtps__dynamic_data_get_bool_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, bool * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_bool_value(*value, id);
-}
+#define FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(FunctionT, ValueT, DataFnT) \
+  void \
+  fastrtps__dynamic_data_get_ ## FunctionT ## _value( \
+    rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
+    const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, \
+    rosidl_dynamic_typesupport_member_id_t id, ValueT * value) \
+  { \
+    (void) serialization_support_impl; \
+    static_cast<const DynamicData *>(data_impl->handle)->get_ ## DataFnT ## _value(*value, id); \
+  }
 
 
-void
-fastrtps__dynamic_data_get_byte_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, unsigned char * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_byte_value(*value, id);
-}
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(bool, bool, bool);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(byte, unsigned char, byte);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(char, char, char8);
+// FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(wchar, char16_t, char16);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(float32, float, float32);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(float64, double, float64);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(float128, long double, float128);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(int8, int8_t, int8);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(uint8, uint8_t, uint8);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(int16, int16_t, int16);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(uint16, uint16_t, uint16);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(int32, int32_t, int32);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(uint32, uint32_t, uint32);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(int64, int64_t, int64);
+FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(uint64, uint64_t, uint64);
+#undef FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN
 
 
-void
-fastrtps__dynamic_data_get_char_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, char * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_char8_value(*value, id);
-}
-
-
+// This needs something different to do the conversion out
 void
 fastrtps__dynamic_data_get_wchar_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
@@ -352,126 +355,6 @@ fastrtps__dynamic_data_get_wchar_value(
 
 
 void
-fastrtps__dynamic_data_get_float32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, float * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_float32_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_float64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, double * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_float64_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_float128_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, long double * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_float128_value(*value, id);
-}
-
-void
-fastrtps__dynamic_data_get_int8_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int8_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_int8_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_uint8_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint8_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_uint8_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_int16_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int16_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_int16_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_uint16_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint16_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_uint16_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_int32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int32_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_int32_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_uint32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint32_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_uint32_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_int64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int64_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_int64_value(*value, id);
-}
-
-
-void
-fastrtps__dynamic_data_get_uint64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint64_t * value)
-{
-  (void) serialization_support_impl;
-  static_cast<const DynamicData *>(data_impl->handle)->get_uint64_value(*value, id);
-}
-
-
-void
 fastrtps__dynamic_data_get_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -479,7 +362,7 @@ fastrtps__dynamic_data_get_string_value(
 {
   (void) serialization_support_impl;
   std::string tmp_string;
-  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);  // Lifetime is in the data_impl obj
+  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);
 
   *value_length = tmp_string.size();
   char * out = new char[*value_length + 1];
@@ -516,7 +399,7 @@ fastrtps__dynamic_data_get_bounded_string_value(
 {
   (void) serialization_support_impl;
   std::string tmp_string;
-  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);  // Lifetime is in the data_impl obj
+  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);
 
   *value_length = std::min(tmp_string.size(), string_bound);
   char * out = new char[*value_length + 1];
@@ -546,169 +429,33 @@ fastrtps__dynamic_data_get_bounded_wstring_value(
 
 
 // DYNAMIC DATA PRIMITIVE MEMBER SETTERS ===========================================================
-void
-fastrtps__dynamic_data_set_bool_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, bool value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_bool_value(value, id);
-}
+#define FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(FunctionT, ValueT, DataFnT) \
+  void \
+  fastrtps__dynamic_data_set_ ## FunctionT ## _value( \
+    rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
+    rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, \
+    rosidl_dynamic_typesupport_member_id_t id, ValueT value) \
+  { \
+    (void) serialization_support_impl; \
+    static_cast<DynamicData *>(data_impl->handle)->set_ ## DataFnT ## _value(value, id); \
+  }
 
-
-void
-fastrtps__dynamic_data_set_byte_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint8_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_byte_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_char_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, char value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_char8_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_wchar_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, char16_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_char16_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_float32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, float value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_float32_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_float64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, double value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_float64_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_float128_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, long double value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_float128_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_int8_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int8_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_int8_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_uint8_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint8_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_uint8_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_int16_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int16_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_int16_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_uint16_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint16_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_uint16_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_int32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int32_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_int32_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_uint32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint32_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_uint32_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_int64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, int64_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_int64_value(value, id);
-}
-
-
-void
-fastrtps__dynamic_data_set_uint64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, uint64_t value)
-{
-  (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_uint64_value(value, id);
-}
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(bool, bool, bool);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(byte, unsigned char, byte);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(char, char, char8);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(wchar, char16_t, char16);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(float32, float, float32);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(float64, double, float64);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(float128, long double, float128);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(int8, int8_t, int8);  // NOTE!!
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(uint8, uint8_t, uint8);  // NOTE!!
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(int16, int16_t, int16);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(uint16, uint16_t, uint16);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(int32, int32_t, int32);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(uint32, uint32_t, uint32);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(int64, int64_t, int64);
+FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(uint64, uint64_t, uint64);
+#undef FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN
 
 
 void
@@ -802,201 +549,35 @@ fastrtps__dynamic_data_insert_sequence_data(
 }
 
 
-void
-fastrtps__dynamic_data_insert_bool_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, bool value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_bool_value(value, tmp_id);
-  *out_id = tmp_id;
-}
+#define FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(FunctionT, ValueT, DataFnT) \
+  void \
+  fastrtps__dynamic_data_insert_ ## FunctionT ## _value( \
+    rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
+    rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, ValueT value, \
+    rosidl_dynamic_typesupport_member_id_t * out_id) \
+  { \
+    (void) serialization_support_impl; \
+    eprosima::fastrtps::types::MemberId tmp_id; \
+    static_cast<DynamicData *>(data_impl->handle)->insert_ ## DataFnT ## _value(value, tmp_id); \
+    *out_id = tmp_id; \
+  }
 
-
-void
-fastrtps__dynamic_data_insert_byte_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, uint8_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_byte_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_char_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, char value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_char8_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_wchar_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, char16_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_char16_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_float32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, float value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_float32_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_float64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, double value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_float64_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_float128_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, long double value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_float128_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_int8_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, int8_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  // NOTE(methylDragon): There is no insert_int8_value method
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_char8_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_uint8_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, uint8_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  // NOTE(methylDragon): There is no insert_uint8_value method
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_byte_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_int16_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, int16_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_int16_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_uint16_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, uint16_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_uint16_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_int32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, int32_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_int32_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_uint32_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, uint32_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_uint32_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_int64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, int64_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_int64_value(value, tmp_id);
-  *out_id = tmp_id;
-}
-
-
-void
-fastrtps__dynamic_data_insert_uint64_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, uint64_t value,
-  rosidl_dynamic_typesupport_member_id_t * out_id)
-{
-  (void) serialization_support_impl;
-  eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_uint64_value(value, tmp_id);
-  *out_id = tmp_id;
-}
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(bool, bool, bool);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(byte, unsigned char, byte);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(char, char, char8);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(wchar, char16_t, char16);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(float32, float, float32);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(float64, double, float64);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(float128, long double, float128);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(int8, int8_t, char8);  // There is no int8 method
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(uint8, uint8_t, byte);  // There is no uint8 method
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(int16, int16_t, int16);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(uint16, uint16_t, uint16);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(int32, int32_t, int32);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(uint32, uint32_t, uint32);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(int64, int64_t, int64);
+FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(uint64, uint64_t, uint64);
+#undef FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN
 
 
 void
