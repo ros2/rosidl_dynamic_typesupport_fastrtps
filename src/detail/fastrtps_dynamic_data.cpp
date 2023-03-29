@@ -391,6 +391,48 @@ fastrtps__dynamic_data_get_wstring_value(
 
 
 void
+fastrtps__dynamic_data_get_fixed_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, char ** value, size_t * value_length,
+  size_t string_length)
+{
+  (void) serialization_support_impl;
+  std::string tmp_string;
+  // On the wire it's a bounded string
+  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);
+
+  size_t copy_length = std::min(tmp_string.size(), string_length);
+  *value_length = string_length;
+  char * out = new char[*value_length + 1]();
+  strncpy(out, tmp_string.c_str(), copy_length);
+  out[*value_length] = '\0';
+  *value = out;
+}
+
+
+void
+fastrtps__dynamic_data_get_fixed_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, char16_t ** value, size_t * value_length,
+  size_t wstring_length)
+{
+  (void) serialization_support_impl;
+  std::wstring tmp_wstring;
+  // On the wire it's a bounded string
+  static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id);
+
+  size_t copy_length = std::min(tmp_wstring.size(), wstring_length);
+  *value_length = wstring_length;
+  char16_t * out = new char16_t[*value_length + 1];
+  fastrtps__ucsncpy(out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), copy_length);
+  out[*value_length] = '\0';
+  *value = out;
+}
+
+
+void
 fastrtps__dynamic_data_get_bounded_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -466,7 +508,6 @@ fastrtps__dynamic_data_set_string_value(
 {
   (void) serialization_support_impl;
   const std::string tmp_string(value, value_length);
-  // TODO(methylDragon): Check for dealloc
   static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
 }
 
@@ -479,7 +520,35 @@ fastrtps__dynamic_data_set_wstring_value(
 {
   (void) serialization_support_impl;
   const std::u16string tmp_u16string(value, value_length);
-  // TODO(methylDragon): Check for dealloc
+  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
+    fastrtps__u16string_to_wstring(tmp_u16string), id);
+}
+
+
+void
+fastrtps__dynamic_data_set_fixed_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char * value, size_t value_length,
+  size_t string_length)
+{
+  (void) serialization_support_impl;
+  std::string tmp_string(value, std::min(value_length, string_length));
+  tmp_string.resize(string_length, '\0');
+  static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
+}
+
+
+void
+fastrtps__dynamic_data_set_fixed_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char16_t * value, size_t value_length,
+  size_t wstring_length)
+{
+  (void) serialization_support_impl;
+  std::u16string tmp_u16string(value, std::min(value_length, wstring_length));
+  tmp_u16string.resize(wstring_length, '\0');
   static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
     fastrtps__u16string_to_wstring(tmp_u16string), id);
 }
@@ -494,7 +563,6 @@ fastrtps__dynamic_data_set_bounded_string_value(
 {
   (void) serialization_support_impl;
   const std::string tmp_string(value, std::min(value_length, string_bound));
-  // TODO(methylDragon): Check for dealloc
   static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
 }
 
@@ -508,7 +576,6 @@ fastrtps__dynamic_data_set_bounded_wstring_value(
 {
   (void) serialization_support_impl;
   const std::u16string tmp_u16string(value, std::min(value_length, wstring_bound));
-  // TODO(methylDragon): Check for dealloc
   static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
     fastrtps__u16string_to_wstring(tmp_u16string), id);
 }
@@ -611,6 +678,39 @@ fastrtps__dynamic_data_insert_wstring_value(
 
 
 void
+fastrtps__dynamic_data_insert_fixed_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * value,
+  size_t value_length, size_t string_length, rosidl_dynamic_typesupport_member_id_t * out_id)
+{
+  (void) serialization_support_impl;
+  eprosima::fastrtps::types::MemberId tmp_id;
+  std::string tmp_string = std::string(value, std::min(value_length, string_length));
+  tmp_string.resize(string_length, '\0');
+  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
+    tmp_string, tmp_id);
+  *out_id = tmp_id;
+}
+
+
+void
+fastrtps__dynamic_data_insert_fixed_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char16_t * value,
+  size_t value_length, size_t wstring_length,
+  rosidl_dynamic_typesupport_member_id_t * out_id)
+{
+  (void) serialization_support_impl;
+  eprosima::fastrtps::types::MemberId tmp_id;
+  std::u16string tmp_ustring = std::u16string(value, std::min(value_length, wstring_length));
+  tmp_ustring.resize(wstring_length, '\0');
+  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
+    fastrtps__u16string_to_wstring(tmp_ustring), tmp_id);
+  *out_id = tmp_id;
+}
+
+
+void
 fastrtps__dynamic_data_insert_bounded_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * value,
@@ -650,7 +750,6 @@ fastrtps__dynamic_data_get_complex_value(
 {
   (void) serialization_support_impl;
   auto tmp_data = static_cast<DynamicData *>((*value)->handle);
-  // TODO(methylDragon): Check for dealloc
   static_cast<const DynamicData *>(data_impl->handle)->get_complex_value(&tmp_data, id);
 }
 

@@ -275,6 +275,22 @@ fastrtps__dynamic_data_get_wstring_value(
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 void
+fastrtps__dynamic_data_get_fixed_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, char ** value, size_t * value_length,
+  size_t string_length);
+
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
+void
+fastrtps__dynamic_data_get_fixed_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, char16_t ** value, size_t * value_length,
+  size_t wstring_length);
+
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
+void
 fastrtps__dynamic_data_get_bounded_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -409,6 +425,22 @@ fastrtps__dynamic_data_set_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id, const char16_t * value, size_t value_length);
+
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
+void
+fastrtps__dynamic_data_set_fixed_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char * value, size_t value_length,
+  size_t string_length);
+
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
+void
+fastrtps__dynamic_data_set_fixed_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
+  rosidl_dynamic_typesupport_member_id_t id, const char16_t * value, size_t value_length,
+  size_t wstring_length);
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 void
@@ -566,6 +598,20 @@ fastrtps__dynamic_data_insert_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char16_t * value,
   size_t value_length, rosidl_dynamic_typesupport_member_id_t * out_id);
+
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
+void
+fastrtps__dynamic_data_insert_fixed_string_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * value,
+  size_t value_length, size_t string_length, rosidl_dynamic_typesupport_member_id_t * out_id);
+
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
+void
+fastrtps__dynamic_data_insert_fixed_wstring_value(
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char16_t * value,
+  size_t value_length, size_t wstring_length, rosidl_dynamic_typesupport_member_id_t * out_id);
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 void

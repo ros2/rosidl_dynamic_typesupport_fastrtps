@@ -183,6 +183,24 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
   #undef FASTRTPS_SERIALIZATION_SUPPORT_ADD_MEMBER_FN
 
 
+  serialization_support_interface->dynamic_type_builder_add_fixed_string_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_string_member;
+
+  serialization_support_interface->dynamic_type_builder_add_fixed_wstring_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_wstring_member;
+
   serialization_support_interface->dynamic_type_builder_add_bounded_string_member =
     (void (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
@@ -249,6 +267,24 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
     dynamic_type_builder_add_wstring_array_member);
   #undef FASTRTPS_SERIALIZATION_SUPPORT_ADD_ARRAY_MEMBER_FN
 
+
+  serialization_support_interface->dynamic_type_builder_add_fixed_string_array_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_string_array_member;
+
+  serialization_support_interface->dynamic_type_builder_add_fixed_wstring_array_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_wstring_array_member;
 
   serialization_support_interface->dynamic_type_builder_add_bounded_string_array_member =
     (void (*)(
@@ -317,8 +353,28 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
   #undef FASTRTPS_SERIALIZATION_SUPPORT_ADD_UNBOUNDED_SEQUENCE_MEMBER_FN
 
 
-  serialization_support_interface->dynamic_type_builder_add_bounded_string_unbounded_sequence_member
-    =
+  serialization_support_interface->
+  dynamic_type_builder_add_fixed_string_unbounded_sequence_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_string_unbounded_sequence_member;
+
+  serialization_support_interface->
+  dynamic_type_builder_add_fixed_wstring_unbounded_sequence_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_wstring_unbounded_sequence_member;
+
+  serialization_support_interface->
+  dynamic_type_builder_add_bounded_string_unbounded_sequence_member =
     (void (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
@@ -386,6 +442,24 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
   #undef FASTRTPS_SERIALIZATION_SUPPORT_ADD_BOUNDED_SEQUENCE_MEMBER_FN
 
 
+  serialization_support_interface->dynamic_type_builder_add_fixed_string_bounded_sequence_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_string_bounded_sequence_member;
+
+  serialization_support_interface->dynamic_type_builder_add_fixed_wstring_bounded_sequence_member =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t,
+      const char *, size_t, size_t, size_t))
+    fastrtps__dynamic_type_builder_add_fixed_wstring_bounded_sequence_member;
+
   serialization_support_interface->dynamic_type_builder_add_bounded_string_bounded_sequence_member =
     (void (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
@@ -395,8 +469,8 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       const char *, size_t, size_t, size_t))
     fastrtps__dynamic_type_builder_add_bounded_string_bounded_sequence_member;
 
-  serialization_support_interface->dynamic_type_builder_add_bounded_wstring_bounded_sequence_member
-    =
+  serialization_support_interface->
+  dynamic_type_builder_add_bounded_wstring_bounded_sequence_member =
     (void (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
@@ -664,6 +738,22 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       char16_t **, size_t *))
     fastrtps__dynamic_data_get_wstring_value;
 
+  serialization_support_interface->dynamic_data_get_fixed_string_value =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      const rosidl_dynamic_typesupport_dynamic_data_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      char **, size_t *, size_t))
+    fastrtps__dynamic_data_get_fixed_string_value;
+
+  serialization_support_interface->dynamic_data_get_fixed_wstring_value =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      const rosidl_dynamic_typesupport_dynamic_data_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      char16_t **, size_t *, size_t))
+    fastrtps__dynamic_data_get_fixed_wstring_value;
+
   serialization_support_interface->dynamic_data_get_bounded_string_value =
     (void (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
@@ -724,6 +814,22 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       rosidl_dynamic_typesupport_member_id_t,
       const char16_t *, size_t))
     fastrtps__dynamic_data_set_wstring_value;
+
+  serialization_support_interface->dynamic_data_set_fixed_string_value =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_data_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char *, size_t, size_t))
+    fastrtps__dynamic_data_set_fixed_string_value;
+
+  serialization_support_interface->dynamic_data_set_fixed_wstring_value =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_data_impl_t *,
+      rosidl_dynamic_typesupport_member_id_t,
+      const char16_t *, size_t, size_t))
+    fastrtps__dynamic_data_set_fixed_wstring_value;
 
   serialization_support_interface->dynamic_data_set_bounded_string_value =
     (void (*)(
@@ -805,6 +911,22 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       size_t,
       rosidl_dynamic_typesupport_member_id_t *))
     fastrtps__dynamic_data_insert_wstring_value;
+
+  serialization_support_interface->dynamic_data_insert_fixed_string_value =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_data_impl_t *,
+      const char *, size_t, size_t,
+      rosidl_dynamic_typesupport_member_id_t *))
+    fastrtps__dynamic_data_insert_fixed_string_value;
+
+  serialization_support_interface->dynamic_data_insert_fixed_wstring_value =
+    (void (*)(
+      rosidl_dynamic_typesupport_serialization_support_impl_t *,
+      rosidl_dynamic_typesupport_dynamic_data_impl_t *,
+      const char16_t *, size_t, size_t,
+      rosidl_dynamic_typesupport_member_id_t *))
+    fastrtps__dynamic_data_insert_fixed_wstring_value;
 
   serialization_support_interface->dynamic_data_insert_bounded_string_value =
     (void (*)(
