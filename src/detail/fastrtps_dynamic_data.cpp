@@ -26,7 +26,7 @@
 
 #include "fastrtps_dynamic_data.h"
 #include "fastrtps_serialization_support_impl_handle.h"
-#include "utils.hpp"
+#include "utils.h"
 
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/types/uint8_array.h>

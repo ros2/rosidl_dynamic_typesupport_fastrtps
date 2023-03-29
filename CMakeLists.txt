@@ -34,6 +34,7 @@ add_library(${PROJECT_NAME}
   "src/detail/fastrtps_dynamic_data.cpp"
   "src/detail/fastrtps_dynamic_type.cpp"
   "src/detail/fastrtps_serialization_support_impl_handle.cpp"
+  "src/detail/utils.cpp"
 
   "src/identifier.cpp"
   "src/serialization_support.cpp"

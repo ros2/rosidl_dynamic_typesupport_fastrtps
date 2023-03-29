@@ -22,7 +22,7 @@
 
 #include "fastrtps_dynamic_type.h"
 #include "fastrtps_serialization_support_impl_handle.h"
-#include "utils.hpp"
+#include "utils.h"
 
 #include <rosidl_runtime_c/type_description/field__functions.h>
 #include <rosidl_runtime_c/type_description/field__struct.h>

@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__UTILS_HPP_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__UTILS_HPP_
+#include "utils.h"
 
 #include <limits>
 #include <stdexcept>
+#include <string>
 
-inline
 uint32_t
 fastrtps__size_t_to_uint32_t(size_t in)
 {
@@ -29,7 +28,8 @@ fastrtps__size_t_to_uint32_t(size_t in)
 }
 
 
-inline char16_t * fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
+char16_t *
+fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
 {
   if (dest == NULL) {
     return NULL;
@@ -45,7 +45,8 @@ inline char16_t * fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_
 }
 
 
-inline std::wstring fastrtps__u16string_to_wstring(const std::u16string & u16str)
+std::wstring
+fastrtps__u16string_to_wstring(const std::u16string & u16str)
 {
   std::wstring wstr;
   wstr.resize(u16str.size());
@@ -56,7 +57,8 @@ inline std::wstring fastrtps__u16string_to_wstring(const std::u16string & u16str
 }
 
 
-inline std::u16string fastrtps__wstring_to_u16string(const std::wstring & wstr)
+std::u16string
+fastrtps__wstring_to_u16string(const std::wstring & wstr)
 {
   std::u16string u16str;
   u16str.resize(wstr.size());
@@ -67,7 +69,6 @@ inline std::u16string fastrtps__wstring_to_u16string(const std::wstring & wstr)
 }
 
 
-inline
 std::string
 fastrtps__replace_string(std::string str, const std::string & from, const std::string & to)
 {
@@ -78,6 +79,3 @@ fastrtps__replace_string(std::string str, const std::string & from, const std::s
   }
   return str;
 }
-
-
-#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_TYPE_H_
