@@ -15,12 +15,13 @@
 #ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__IDENTIFIER_H_
 #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__IDENTIFIER_H_
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+
 extern const char * const fastrtps_serialization_support_library_identifier;
+
 
 #ifdef __cplusplus
 }

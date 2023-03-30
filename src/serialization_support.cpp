@@ -15,10 +15,6 @@
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 #include <rosidl_dynamic_typesupport/types.h>
 
-#include "detail/fastrtps_dynamic_data.h"
-#include "detail/fastrtps_dynamic_type.h"
-#include "detail/fastrtps_serialization_support_impl_handle.h"
-
 #include <rcutils/types/uint8_array.h>
 #include <rcutils/allocator.h>
 #include <rosidl_dynamic_typesupport_fastrtps/identifier.h>
@@ -26,6 +22,10 @@
 
 #include <fastrtps/types/DynamicDataFactory.h>
 #include <fastrtps/types/DynamicTypeBuilderFactory.h>
+
+#include "detail/fastrtps_dynamic_data.hpp"
+#include "detail/fastrtps_dynamic_type.hpp"
+#include "detail/fastrtps_serialization_support_impl_handle.hpp"
 
 
 // =================================================================================================

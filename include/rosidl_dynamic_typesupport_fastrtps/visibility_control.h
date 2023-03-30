@@ -20,6 +20,7 @@ extern "C"
 {
 #endif
 
+
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
 //     https://gcc.gnu.org/wiki/Visibility
 
@@ -48,6 +49,7 @@ extern "C"
     #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_LOCAL
   #endif
 #endif
+
 
 #ifdef __cplusplus
 }

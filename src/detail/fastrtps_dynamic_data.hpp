@@ -12,19 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_H_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_H_
+#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_
+#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_
 
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 
 #include <uchar.h>
 #include <rcutils/types/uint8_array.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 // =================================================================================================
@@ -663,8 +658,4 @@ fastrtps__dynamic_data_insert_complex_value(
   rosidl_dynamic_typesupport_member_id_t * out_id);
 
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_H_
+#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_

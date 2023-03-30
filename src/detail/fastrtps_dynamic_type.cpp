@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "fastrtps_dynamic_type.hpp"
+#include "fastrtps_serialization_support_impl_handle.hpp"
+#include "utils.hpp"
+
 #include <string.h>
 #include <string>
 
@@ -19,10 +23,6 @@
 #include <fastrtps/types/DynamicTypePtr.h>
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 #include <fastrtps/types/TypeDescriptor.h>
-
-#include "fastrtps_dynamic_type.h"
-#include "fastrtps_serialization_support_impl_handle.h"
-#include "utils.h"
 
 #include <rosidl_runtime_c/type_description/field__functions.h>
 #include <rosidl_runtime_c/type_description/field__struct.h>

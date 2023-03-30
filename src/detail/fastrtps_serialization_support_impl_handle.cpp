@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "fastrtps_serialization_support_impl_handle.hpp"
+
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
-#include "fastrtps_serialization_support_impl_handle.h"
 
 
 void

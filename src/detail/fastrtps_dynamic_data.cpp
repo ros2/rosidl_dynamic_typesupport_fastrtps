@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "fastrtps_dynamic_data.hpp"
+#include "fastrtps_serialization_support_impl_handle.hpp"
+#include "utils.hpp"
+
 #include <algorithm>
 #include <codecvt>
 #include <cstring>
@@ -23,10 +27,6 @@
 #include <fastrtps/types/DynamicDataHelper.hpp>
 #include <fastrtps/types/DynamicPubSubType.h>
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
-
-#include "fastrtps_dynamic_data.h"
-#include "fastrtps_serialization_support_impl_handle.h"
-#include "utils.h"
 
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/types/uint8_array.h>
