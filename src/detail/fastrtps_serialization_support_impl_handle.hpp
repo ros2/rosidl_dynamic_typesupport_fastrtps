@@ -18,6 +18,7 @@
 #include <fastrtps/types/DynamicDataFactory.h>
 #include <fastrtps/types/DynamicTypeBuilderFactory.h>
 
+#include <rcutils/types/rcutils_ret.h>
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 
@@ -30,7 +31,7 @@ typedef struct fastrtps__serialization_support_impl_handle_s
 } fastrtps__serialization_support_impl_handle_t;
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-void
+rcutils_ret_t
 fastrtps__serialization_support_impl_handle_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);
 

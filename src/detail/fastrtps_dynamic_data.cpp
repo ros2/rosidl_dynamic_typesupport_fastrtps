@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "fastrtps_dynamic_data.hpp"
+#include "macros.hpp"
 #include "fastrtps_serialization_support_impl_handle.hpp"
 #include "utils.hpp"
 
@@ -46,34 +47,40 @@ using eprosima::fastrtps::types::DynamicTypeBuilder_ptr;
 // =================================================================================================
 
 // DYNAMIC DATA UTILS ==============================================================================
-void
+rcutils_ret_t
 fastrtps__dynamic_data_clear_all_values(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
   (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->clear_all_values();
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->clear_all_values(),
+    "Could not clear all values");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_clear_nonkey_values(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
   (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->clear_nonkey_values();
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->clear_nonkey_values(),
+    "Could not clear nonkey values");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_clear_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id)
 {
   (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->clear_value(id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->clear_value(id),
+    "Could not clear value");
 }
 
 
@@ -148,25 +155,28 @@ fastrtps__dynamic_data_loan_value(
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_return_loaned_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * inner_data_impl)
 {
   (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)
-    ->return_loaned_value(static_cast<const DynamicData *>(inner_data_impl->handle));
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)
+      ->return_loaned_value(static_cast<const DynamicData *>(inner_data_impl->handle)),
+    "Could not return loaned value");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_print(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
   (void) serialization_support_impl;
   DynamicDataHelper::print(static_cast<const DynamicData *>(data_impl->handle));
+  return RCUTILS_RET_OK;
 }
 
 
@@ -227,13 +237,15 @@ fastrtps__dynamic_data_clone(
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
-  static_cast<fastrtps__serialization_support_impl_handle_t *>(serialization_support_impl->handle)
-  ->data_factory_->delete_data(static_cast<DynamicData *>(data_impl->handle));
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<fastrtps__serialization_support_impl_handle_t *>(serialization_support_impl->handle)
+      ->data_factory_->delete_data(static_cast<DynamicData *>(data_impl->handle)),
+    "Could not delete data");
 }
 
 
@@ -311,14 +323,17 @@ fastrtps__dynamic_data_deserialize(
 
 // DYNAMIC DATA PRIMITIVE MEMBER GETTERS ===========================================================
 #define FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(FunctionT, ValueT, DataFnT) \
-  void \
+  rcutils_ret_t \
   fastrtps__dynamic_data_get_ ## FunctionT ## _value( \
     rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
     const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, \
     rosidl_dynamic_typesupport_member_id_t id, ValueT * value) \
   { \
     (void) serialization_support_impl; \
-    static_cast<const DynamicData *>(data_impl->handle)->get_ ## DataFnT ## _value(*value, id); \
+    FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
+      static_cast<const DynamicData *>(data_impl->handle)->get_ ## DataFnT ## _value(*value, id), \
+      "Could not get `" #FunctionT "` value (of type `" #ValueT "`)" \
+    ); \
   }
 
 
@@ -341,20 +356,25 @@ FASTRTPS_DYNAMIC_DATA_GET_VALUE_FN(uint64, uint64_t, uint64);
 
 
 // This needs something different to do the conversion out
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_wchar_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id, char16_t * value)
 {
   (void) serialization_support_impl;
-  wchar_t out;
-  static_cast<const DynamicData *>(data_impl->handle)->get_char16_value(out, id);
-  *value = static_cast<char16_t>(out);
+  wchar_t tmp_out;
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_char16_value(tmp_out, id),
+    "Could not get `wchar` value (of type `char16_t`)");
+
+  *value = static_cast<char16_t>(tmp_out);
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -362,17 +382,21 @@ fastrtps__dynamic_data_get_string_value(
 {
   (void) serialization_support_impl;
   std::string tmp_string;
-  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id),
+    "Could not get `string` value (of type `string`)");
 
   *value_length = tmp_string.size();
-  char * out = new char[*value_length + 1];
-  strncpy(out, tmp_string.c_str(), *value_length);
-  out[*value_length] = '\0';
-  *value = out;
+  char * tmp_out = new char[*value_length + 1];
+  strncpy(tmp_out, tmp_string.c_str(), *value_length);
+  tmp_out[*value_length] = '\0';
+  *value = tmp_out;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -380,17 +404,21 @@ fastrtps__dynamic_data_get_wstring_value(
 {
   (void) serialization_support_impl;
   std::wstring tmp_wstring;
-  static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id),
+    "Could not get `wstring` value (of type `char16_t *`)");
 
   *value_length = tmp_wstring.size();
-  char16_t * out = new char16_t[*value_length + 1];
-  fastrtps__ucsncpy(out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
-  out[*value_length] = '\0';
-  *value = out;
+  char16_t * tmp_out = new char16_t[*value_length + 1];
+  fastrtps__ucsncpy(tmp_out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
+  tmp_out[*value_length] = '\0';
+  *value = tmp_out;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_fixed_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -399,19 +427,23 @@ fastrtps__dynamic_data_get_fixed_string_value(
 {
   (void) serialization_support_impl;
   std::string tmp_string;
+
   // On the wire it's a bounded string
-  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id),
+    "Could not get fixed `string` value (of type `char *`)");
 
   size_t copy_length = std::min(tmp_string.size(), string_length);
   *value_length = string_length;
-  char * out = new char[*value_length + 1]();
-  strncpy(out, tmp_string.c_str(), copy_length);
-  out[*value_length] = '\0';
-  *value = out;
+  char * tmp_out = new char[*value_length + 1]();
+  strncpy(tmp_out, tmp_string.c_str(), copy_length);
+  tmp_out[*value_length] = '\0';
+  *value = tmp_out;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_fixed_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -420,19 +452,23 @@ fastrtps__dynamic_data_get_fixed_wstring_value(
 {
   (void) serialization_support_impl;
   std::wstring tmp_wstring;
+
   // On the wire it's a bounded string
-  static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id),
+    "Could not get fixed `wstring` value (of type `char16_t *`)");
 
   size_t copy_length = std::min(tmp_wstring.size(), wstring_length);
   *value_length = wstring_length;
-  char16_t * out = new char16_t[*value_length + 1];
-  fastrtps__ucsncpy(out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), copy_length);
-  out[*value_length] = '\0';
-  *value = out;
+  char16_t * tmp_out = new char16_t[*value_length + 1];
+  fastrtps__ucsncpy(tmp_out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), copy_length);
+  tmp_out[*value_length] = '\0';
+  *value = tmp_out;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_bounded_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -441,17 +477,21 @@ fastrtps__dynamic_data_get_bounded_string_value(
 {
   (void) serialization_support_impl;
   std::string tmp_string;
-  static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id),
+    "Could not get bounded `string` value (of type `char *`)");
 
   *value_length = std::min(tmp_string.size(), string_bound);
-  char * out = new char[*value_length + 1];
-  strncpy(out, tmp_string.c_str(), *value_length);
-  out[*value_length] = '\0';
-  *value = out;
+  char * tmp_out = new char[*value_length + 1];
+  strncpy(tmp_out, tmp_string.c_str(), *value_length);
+  tmp_out[*value_length] = '\0';
+  *value = tmp_out;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_bounded_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -460,26 +500,33 @@ fastrtps__dynamic_data_get_bounded_wstring_value(
 {
   (void) serialization_support_impl;
   std::wstring tmp_wstring;
-  static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id),
+    "Could not get bounded `wstring` value (of type `char16_t *`)");
 
   *value_length = std::min(tmp_wstring.size(), wstring_bound);
-  char16_t * out = new char16_t[*value_length + 1];
-  fastrtps__ucsncpy(out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
-  out[*value_length] = '\0';
-  *value = out;
+  char16_t * tmp_out = new char16_t[*value_length + 1];
+  fastrtps__ucsncpy(tmp_out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
+  tmp_out[*value_length] = '\0';
+  *value = tmp_out;
+  return RCUTILS_RET_OK;
 }
 
 
 // DYNAMIC DATA PRIMITIVE MEMBER SETTERS ===========================================================
 #define FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(FunctionT, ValueT, DataFnT) \
-  void \
+  rcutils_ret_t \
   fastrtps__dynamic_data_set_ ## FunctionT ## _value( \
     rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
     rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, \
     rosidl_dynamic_typesupport_member_id_t id, ValueT value) \
   { \
     (void) serialization_support_impl; \
-    static_cast<DynamicData *>(data_impl->handle)->set_ ## DataFnT ## _value(value, id); \
+    FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
+      static_cast<DynamicData *>(data_impl->handle)->set_ ## DataFnT ## _value(value, id), \
+      "Could not set `" #FunctionT "` value (of type `" #ValueT "`)" \
+    ); \
   }
 
 FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(bool, bool, bool);
@@ -500,7 +547,7 @@ FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN(uint64, uint64_t, uint64);
 #undef FASTRTPS_DYNAMIC_DATA_SET_VALUE_FN
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_set_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -508,11 +555,13 @@ fastrtps__dynamic_data_set_string_value(
 {
   (void) serialization_support_impl;
   const std::string tmp_string(value, value_length);
-  static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id),
+    "Could not set `string` value (of type `char *`)");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_set_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -520,12 +569,14 @@ fastrtps__dynamic_data_set_wstring_value(
 {
   (void) serialization_support_impl;
   const std::u16string tmp_u16string(value, value_length);
-  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
-    fastrtps__u16string_to_wstring(tmp_u16string), id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
+      fastrtps__u16string_to_wstring(tmp_u16string), id),
+    "Could not set `wstring` value (of type `char16_t *`)");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_set_fixed_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -535,11 +586,13 @@ fastrtps__dynamic_data_set_fixed_string_value(
   (void) serialization_support_impl;
   std::string tmp_string(value, std::min(value_length, string_length));
   tmp_string.resize(string_length, '\0');
-  static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id),
+    "Could not set fixed `string` value (of type `char *`)");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_set_fixed_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -549,12 +602,14 @@ fastrtps__dynamic_data_set_fixed_wstring_value(
   (void) serialization_support_impl;
   std::u16string tmp_u16string(value, std::min(value_length, wstring_length));
   tmp_u16string.resize(wstring_length, '\0');
-  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
-    fastrtps__u16string_to_wstring(tmp_u16string), id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
+      fastrtps__u16string_to_wstring(tmp_u16string), id),
+    "Could not set fixed `wstring` value (of type `char16_t *`)");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_set_bounded_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -563,11 +618,13 @@ fastrtps__dynamic_data_set_bounded_string_value(
 {
   (void) serialization_support_impl;
   const std::string tmp_string(value, std::min(value_length, string_bound));
-  static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id),
+    "Could not set bounded `string` value (of type `char *`)");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_set_bounded_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -576,34 +633,40 @@ fastrtps__dynamic_data_set_bounded_wstring_value(
 {
   (void) serialization_support_impl;
   const std::u16string tmp_u16string(value, std::min(value_length, wstring_bound));
-  static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
-    fastrtps__u16string_to_wstring(tmp_u16string), id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
+      fastrtps__u16string_to_wstring(tmp_u16string), id),
+    "Could not set bounded `wstring` value (of type `char16_t *`)");
 }
 
 
 // DYNAMIC DATA SEQUENCES ==========================================================================
-void
+rcutils_ret_t
 fastrtps__dynamic_data_clear_sequence_data(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
   (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->clear_data();
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->clear_data(),
+    "Could not clear sequence data");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_remove_sequence_data(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id)
 {
   (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->remove_sequence_data(id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->remove_sequence_data(id),
+    "Could not remove sequence data");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_sequence_data(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -611,13 +674,16 @@ fastrtps__dynamic_data_insert_sequence_data(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_sequence_data(tmp_id);
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_sequence_data(tmp_id),
+    "Could not insert sequence data");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
 #define FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(FunctionT, ValueT, DataFnT) \
-  void \
+  rcutils_ret_t \
   fastrtps__dynamic_data_insert_ ## FunctionT ## _value( \
     rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl, \
     rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, ValueT value, \
@@ -625,8 +691,13 @@ fastrtps__dynamic_data_insert_sequence_data(
   { \
     (void) serialization_support_impl; \
     eprosima::fastrtps::types::MemberId tmp_id; \
-    static_cast<DynamicData *>(data_impl->handle)->insert_ ## DataFnT ## _value(value, tmp_id); \
+    \
+    FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG( \
+      static_cast<DynamicData *>(data_impl->handle)->insert_ ## DataFnT ## _value(value, tmp_id), \
+      "Could not insert `" #FunctionT "` value (of type `" #ValueT "`)" \
+    ); \
     *out_id = tmp_id; \
+    return RCUTILS_RET_OK; \
   }
 
 FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(bool, bool, bool);
@@ -647,7 +718,7 @@ FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN(uint64, uint64_t, uint64);
 #undef FASTRTPS_DYNAMIC_DATA_INSERT_VALUE_FN
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * value,
@@ -655,13 +726,17 @@ fastrtps__dynamic_data_insert_string_value(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
-    std::string(value, value_length), tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
+      std::string(value, value_length), tmp_id),
+    "Could not insert `string` value (of type `char *`)");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -671,13 +746,17 @@ fastrtps__dynamic_data_insert_wstring_value(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
-    fastrtps__u16string_to_wstring(std::u16string(value, value_length)), tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
+      fastrtps__u16string_to_wstring(std::u16string(value, value_length)), tmp_id),
+      "Could not insert `wstring` value (of type `char16_t *`)");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_fixed_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * value,
@@ -687,13 +766,16 @@ fastrtps__dynamic_data_insert_fixed_string_value(
   eprosima::fastrtps::types::MemberId tmp_id;
   std::string tmp_string = std::string(value, std::min(value_length, string_length));
   tmp_string.resize(string_length, '\0');
-  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
-    tmp_string, tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_string_value(tmp_string, tmp_id),
+    "Could not insert fixed `string` value (of type `char *`)");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_fixed_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char16_t * value,
@@ -704,13 +786,17 @@ fastrtps__dynamic_data_insert_fixed_wstring_value(
   eprosima::fastrtps::types::MemberId tmp_id;
   std::u16string tmp_ustring = std::u16string(value, std::min(value_length, wstring_length));
   tmp_ustring.resize(wstring_length, '\0');
-  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
-    fastrtps__u16string_to_wstring(tmp_ustring), tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
+      fastrtps__u16string_to_wstring(tmp_ustring), tmp_id),
+    "Could not insert fixed `wstring` value (of type `char16_t *`)");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_bounded_string_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char * value,
@@ -718,13 +804,17 @@ fastrtps__dynamic_data_insert_bounded_string_value(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
-    std::string(value, std::min(value_length, string_bound)), tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_string_value(
+      std::string(value, std::min(value_length, string_bound)), tmp_id),
+    "Could not insert bounded `string` value (of type `char *`)");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_bounded_wstring_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, const char16_t * value,
@@ -733,15 +823,19 @@ fastrtps__dynamic_data_insert_bounded_wstring_value(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
-    fastrtps__u16string_to_wstring(std::u16string(value, std::min(value_length, wstring_bound))),
-    tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_wstring_value(
+      fastrtps__u16string_to_wstring(std::u16string(value, std::min(value_length, wstring_bound))),
+      tmp_id),
+    "Could not insert bounded `wstring` value (of type `char16_t *`)");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
 // DYNAMIC DATA NESTED =============================================================================
-void
+rcutils_ret_t
 fastrtps__dynamic_data_get_complex_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -750,23 +844,29 @@ fastrtps__dynamic_data_get_complex_value(
 {
   (void) serialization_support_impl;
   auto tmp_data = static_cast<DynamicData *>((*value)->handle);
-  static_cast<const DynamicData *>(data_impl->handle)->get_complex_value(&tmp_data, id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<const DynamicData *>(data_impl->handle)->get_complex_value(&tmp_data, id),
+    "Could not get complex value");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_set_complex_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id, rosidl_dynamic_typesupport_dynamic_data_impl_t * value)
 {
   (void) serialization_support_impl;
-  static_cast<DynamicData *>(data_impl->handle)->set_complex_value(
-    static_cast<DynamicData *>(value->handle), id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->set_complex_value(
+      static_cast<DynamicData *>(value->handle), id),
+    "Could not set complex value");
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_complex_value_copy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -775,13 +875,17 @@ fastrtps__dynamic_data_insert_complex_value_copy(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_complex_value(
-    static_cast<const DynamicData *>(value->handle), tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_complex_value(
+      static_cast<const DynamicData *>(value->handle), tmp_id),
+    "Could not insert complex value copy");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }
 
 
-void
+rcutils_ret_t
 fastrtps__dynamic_data_insert_complex_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -790,7 +894,11 @@ fastrtps__dynamic_data_insert_complex_value(
 {
   (void) serialization_support_impl;
   eprosima::fastrtps::types::MemberId tmp_id;
-  static_cast<DynamicData *>(data_impl->handle)->insert_complex_value(
-    static_cast<DynamicData *>(value->handle), tmp_id);
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    static_cast<DynamicData *>(data_impl->handle)->insert_complex_value(
+      static_cast<DynamicData *>(value->handle), tmp_id),
+    "Could not insert complex value");
   *out_id = tmp_id;
+  return RCUTILS_RET_OK;
 }

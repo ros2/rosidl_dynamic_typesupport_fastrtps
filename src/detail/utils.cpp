@@ -18,6 +18,9 @@
 #include <stdexcept>
 #include <string>
 
+#include <fastrtps/types/TypesBase.h>
+
+
 uint32_t
 fastrtps__size_t_to_uint32_t(size_t in)
 {
@@ -78,4 +81,33 @@ fastrtps__replace_string(std::string str, const std::string & from, const std::s
     pos += to.length();
   }
   return str;
+}
+
+
+rcutils_ret_t
+fastrtps__convert_fastrtps_ret_to_rcl_ret(eprosima::fastrtps::types::ReturnCode_t fastrtps_ret)
+{
+  switch (fastrtps_ret()) {
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK:
+      return RCUTILS_RET_OK;
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_BAD_PARAMETER:
+      return RCUTILS_RET_INVALID_ARGUMENT;
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_OUT_OF_RESOURCES:
+      return RCUTILS_RET_NOT_ENOUGH_SPACE;
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_NO_DATA:
+      return RCUTILS_RET_NOT_FOUND;
+
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_ERROR:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_UNSUPPORTED:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_PRECONDITION_NOT_MET:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_NOT_ENABLED:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_ILLEGAL_OPERATION:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_NOT_ALLOWED_BY_SECURITY:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_IMMUTABLE_POLICY:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_INCONSISTENT_POLICY:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_ALREADY_DELETED:
+    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_TIMEOUT:
+    default:
+      return RCUTILS_RET_ERROR;
+  }
 }
