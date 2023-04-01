@@ -14,6 +14,7 @@
 
 #include "utils.hpp"
 
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -25,7 +26,7 @@ uint32_t
 fastrtps__size_t_to_uint32_t(size_t in)
 {
   if (in > std::numeric_limits<uint32_t>::max()) {
-    std::logic_error("Passed size_t will overflow when narrowed to uint32_t!");
+    std::cerr << "Passed size_t will overflow when narrowed to uint32_t!" << std::endl;
   }
   return static_cast<uint32_t>(in);
 }
@@ -34,7 +35,7 @@ fastrtps__size_t_to_uint32_t(size_t in)
 char16_t *
 fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
 {
-  if (dest == NULL) {
+  if (src == NULL || dest == NULL) {
     return NULL;
   }
   char16_t * out = dest;

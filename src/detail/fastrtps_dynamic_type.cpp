@@ -53,63 +53,85 @@ using eprosima::fastrtps::types::TypeDescriptor;
 // =================================================================================================
 
 // DYNAMIC TYPE UTILS =======================================================================
-bool
+rcutils_ret_t
 fastrtps__dynamic_type_equals(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * other_type_impl)
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * other_type_impl,
+  bool * equals)
 {
   (void) serialization_support_impl;
-
   auto type = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
   auto other = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(other_type_impl->handle));
 
-  return type->equals(other.get());
+  *equals = type->equals(other.get());
+  return RCUTILS_RET_OK;
 }
 
 
-size_t
+rcutils_ret_t
 fastrtps__dynamic_type_get_member_count(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
+  size_t * member_count)
 {
   (void) serialization_support_impl;
   auto type = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
 
-  return type->get_members_count();
+  *member_count = type->get_members_count();
+  return RCUTILS_RET_OK;
 }
 
 
 // DYNAMIC TYPE CONSTRUCTION =======================================================================
-rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_builder_init(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const char * name, size_t name_length)
+  const char * name, size_t name_length,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t ** type_builder_impl)
 {
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
   DynamicTypeBuilder * type_builder_handle = fastrtps_impl->type_factory_->create_struct_builder();
+  if (!type_builder_handle) {
+    RCUTILS_SET_ERROR_MSG("Could not init new struct type builder");
+    return RCUTILS_RET_BAD_ALLOC;
+  }
 
   // We must replace "/" with "::" in type names
-  std::string name_string = fastrtps__replace_string(std::string(name, name_length), "/", "::");
-  type_builder_handle->set_name(name_string);
-  return new rosidl_dynamic_typesupport_dynamic_type_builder_impl_t{std::move(type_builder_handle)};
+  std::string name_string = fastrtps__replace_string(
+    std::string(name, name_length), "/", "::"
+  );
+
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
+    type_builder_handle->set_name(name_string), "Could not set type builder name");
+  *type_builder_impl = new rosidl_dynamic_typesupport_dynamic_type_builder_impl_t{
+    std::move(type_builder_handle)};
+  return RCUTILS_RET_OK;
 }
 
 
-rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_builder_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * other)
+  const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * other,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t ** type_builder_impl)
 {
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
   DynamicTypeBuilder * type_builder_handle = fastrtps_impl->type_factory_->create_builder_copy(
     static_cast<const DynamicTypeBuilder *>(other->handle));
-  return new rosidl_dynamic_typesupport_dynamic_type_builder_impl_t{std::move(type_builder_handle)};
+  if (!type_builder_handle) {
+    RCUTILS_SET_ERROR_MSG("Could not clone struct type builder");
+    return RCUTILS_RET_ERROR;
+  }
+
+  *type_builder_impl = new rosidl_dynamic_typesupport_dynamic_type_builder_impl_t{
+    std::move(type_builder_handle)};
+  return RCUTILS_RET_OK;
 }
 
 
@@ -123,14 +145,16 @@ fastrtps__dynamic_type_builder_fini(
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     fastrtps_impl->type_factory_->delete_builder(
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)),
-    "Could not delete type builder");
+    "Could not delete type builder"
+  );
 }
 
 
-rosidl_dynamic_typesupport_dynamic_type_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_init_from_dynamic_type_builder(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
+  rosidl_dynamic_typesupport_dynamic_type_impl_t ** type_impl)
 {
   (void) serialization_support_impl;
 
@@ -138,38 +162,51 @@ fastrtps__dynamic_type_init_from_dynamic_type_builder(
   //
   // We're forcing the managed pointer to persist outside of function scope by moving ownership
   // to a new, heap-allocated DynamicType_ptr (which is a shared_ptr)
-  return new rosidl_dynamic_typesupport_dynamic_type_impl_t{
-    static_cast<void *>(
-      new DynamicType_ptr(
-        std::move(static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->build())
-      )
-    )
+  eprosima::fastrtps::types::DynamicType_ptr out = static_cast<DynamicTypeBuilder *>(
+    type_builder_impl->handle)->build();
+  if (!out) {
+    RCUTILS_SET_ERROR_MSG("Could not create dynamic type from dynamic type builder");
+    return RCUTILS_RET_BAD_ALLOC;
+  }
+
+  *type_impl = new rosidl_dynamic_typesupport_dynamic_type_impl_t{
+    static_cast<void *>(new DynamicType_ptr(std::move(out)))
   };
+  return RCUTILS_RET_OK;
 }
 
 
-rosidl_dynamic_typesupport_dynamic_type_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
+  rosidl_dynamic_typesupport_dynamic_type_impl_t ** type_impl_out)
 {
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
 
-  auto type = eprosima::fastrtps::types::DynamicType_ptr(
+  auto type_impl_handle = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
+  if (!type_impl_handle) {
+    RCUTILS_SET_ERROR_MSG("Could not get handle to type impl");
+    return RCUTILS_RET_INVALID_ARGUMENT;
+  }
+
+  eprosima::fastrtps::types::DynamicType_ptr type_impl_out_handle =
+    fastrtps_impl->type_factory_->create_alias_type(type_impl_handle, type_impl_handle->get_name());
+  if (!type_impl_out_handle) {
+    RCUTILS_SET_ERROR_MSG("Could not clone struct type");
+    return RCUTILS_RET_ERROR;
+  }
 
   // Disgusting, but unavoidable... (we can't easily transfer ownership)
   //
   // We're forcing the managed pointer to persist outside of function scope by moving ownership
   // to a new, heap-allocated DynamicType_ptr (which is a shared_ptr)
-  return new rosidl_dynamic_typesupport_dynamic_type_impl_t{
-    static_cast<void *>(
-      new DynamicType_ptr(
-        std::move(fastrtps_impl->type_factory_->create_alias_type(type, type->get_name()))
-      )
-    )
+  *type_impl_out = new rosidl_dynamic_typesupport_dynamic_type_impl_t{
+    static_cast<void *>(new DynamicType_ptr(std::move(type_impl_out_handle)))
   };
+  return RCUTILS_RET_OK;
 }
 
 
@@ -178,49 +215,52 @@ fastrtps__dynamic_type_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
 {
-  // You typically don't need to call this because the DynamicType_ptr should manage the
-  // destruction for you
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
   auto type = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
-    fastrtps_impl->type_factory_->delete_type(type.get()),
-    "Could not delete type");
+    fastrtps_impl->type_factory_->delete_type(type.get()), "Could not delete type"
+  );
+  return RCUTILS_RET_OK;
 }
 
 
-const char *
+rcutils_ret_t
 fastrtps__dynamic_type_get_name(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
+  const char ** name,
   size_t * name_length)
 {
-  (void)serialization_support_impl;
+  (void) serialization_support_impl;
   auto type = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
 
   // Undo the mangling
-  std::string name = fastrtps__replace_string(type->get_name(), "::", "/");
-  *name_length = name.size();
-  return strdup(name.c_str());
+  std::string tmp_name = fastrtps__replace_string(type->get_name(), "::", "/");
+  *name = strdup(tmp_name.c_str());
+  *name_length = tmp_name.size();
+  return RCUTILS_RET_OK;
 }
 
 
-const char *
+rcutils_ret_t
 fastrtps__dynamic_type_builder_get_name(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
+  const char ** name,
   size_t * name_length)
 {
   (void)serialization_support_impl;
 
   // Undo the mangling
-  std::string name = fastrtps__replace_string(
+  std::string tmp_name = fastrtps__replace_string(
     static_cast<const DynamicTypeBuilder *>(type_builder_impl->handle)->get_name(), "::", "/");
-  *name_length = name.size();
-  return strdup(name.c_str());
+  *name = strdup(tmp_name.c_str());
+  *name_length = tmp_name.size();
+  return RCUTILS_RET_OK;
 }
 
 
@@ -234,7 +274,8 @@ fastrtps__dynamic_type_builder_set_name(
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->set_name(
       std::string(name, name_length).c_str()),
-    "Could not set name for type builder");
+    "Could not set name for type builder"
+  );
 }
 
 
@@ -250,7 +291,7 @@ fastrtps__dynamic_type_builder_set_name(
   { \
     auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>( \
       serialization_support_impl->handle); \
-    \
+ \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
         id, std::string(name, name_length).c_str(), \
@@ -360,7 +401,8 @@ fastrtps__dynamic_type_builder_add_bounded_string_member(
       id, std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_string_type(fastrtps__size_t_to_uint32_t(string_bound)),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add string member");
+    "Could not add string member"
+  );
 }
 
 
@@ -382,7 +424,8 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_member(
       fastrtps_impl->type_factory_->create_wstring_type(
         fastrtps__size_t_to_uint32_t(wstring_bound)),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add wstring member");
+    "Could not add wstring member"
+  );
 }
 
 
@@ -399,7 +442,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_member(
   { \
     auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>( \
       serialization_support_impl->handle); \
-    \
+ \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
         id, std::string(name, name_length).c_str(), \
@@ -519,7 +562,8 @@ fastrtps__dynamic_type_builder_add_bounded_string_array_member(
           fastrtps__size_t_to_uint32_t(string_bound)),
         {fastrtps__size_t_to_uint32_t(array_length)}),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add bounded `string` array member to type builder");
+    "Could not add bounded `string` array member to type builder"
+  );
 }
 
 
@@ -544,7 +588,8 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_array_member(
           fastrtps__size_t_to_uint32_t(wstring_bound)),
         {fastrtps__size_t_to_uint32_t(array_length)}),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add bounded `wstring` array member to type builder");
+    "Could not add bounded `wstring` array member to type builder"
+  );
 }
 
 
@@ -670,14 +715,14 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_unbounded_sequence_member(
   { \
     auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>( \
       serialization_support_impl->handle); \
-    \
+ \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
-    static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
-      id, std::string(name, name_length).c_str(), \
-      fastrtps_impl->type_factory_->create_sequence_builder( \
-        fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
-        {fastrtps__size_t_to_uint32_t(sequence_bound)}), \
-      std::string(default_value, default_value_length).c_str()), \
+      static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
+        id, std::string(name, name_length).c_str(), \
+        fastrtps_impl->type_factory_->create_sequence_builder( \
+          fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
+          {fastrtps__size_t_to_uint32_t(sequence_bound)}), \
+        std::string(default_value, default_value_length).c_str()), \
       "Could not add `" #MemberT "` bounded sequence member to type builder" \
     ); \
   }
@@ -787,7 +832,8 @@ fastrtps__dynamic_type_builder_add_bounded_string_bounded_sequence_member(
         fastrtps_impl->type_factory_->create_string_type(fastrtps__size_t_to_uint32_t(string_bound)),
         {fastrtps__size_t_to_uint32_t(sequence_bound)}),
       std::string(default_value, default_value_length).c_str()),
-      "Could not add bounded `string` bounded sequence member to type builder");
+    "Could not add bounded `string` bounded sequence member to type builder"
+  );
 }
 
 
@@ -811,7 +857,8 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_bounded_sequence_member(
         fastrtps_impl->type_factory_->create_wstring_type(fastrtps__size_t_to_uint32_t(wstring_bound)),
         {fastrtps__size_t_to_uint32_t(sequence_bound)}),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add bounded `wstring` bounded sequence member to type builder");
+    "Could not add bounded `wstring` bounded sequence member to type builder"
+  );
 }
 
 
@@ -835,7 +882,8 @@ fastrtps__dynamic_type_builder_add_complex_member(
       id, std::string(name, name_length).c_str(),
       nested_struct_dynamictype_ptr,
       std::string(default_value, default_value_length).c_str()),
-    "Could not add complex member to type builder");
+    "Could not add complex member to type builder"
+  );
 }
 
 
@@ -861,7 +909,8 @@ fastrtps__dynamic_type_builder_add_complex_array_member(
       fastrtps_impl->type_factory_->create_array_builder(
         nested_struct_dynamictype_ptr, {fastrtps__size_t_to_uint32_t(array_length)}),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add complex array member to type builder");
+    "Could not add complex array member to type builder"
+  );
 }
 
 
@@ -903,7 +952,8 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member(
       fastrtps_impl->type_factory_->create_sequence_builder(
         nested_struct_dynamictype_ptr, {fastrtps__size_t_to_uint32_t(sequence_bound)}),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add complex bounded sequence member to type builder");
+    "Could not add complex bounded sequence member to type builder"
+  );
 }
 
 
@@ -923,7 +973,8 @@ fastrtps__dynamic_type_builder_add_complex_member_builder(
       id, std::string(name, name_length).c_str(),
       static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add complex member to type builder (via builder)");
+    "Could not add complex member to type builder (via builder)"
+  );
 }
 
 
@@ -947,7 +998,8 @@ fastrtps__dynamic_type_builder_add_complex_array_member_builder(
         static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
         {fastrtps__size_t_to_uint32_t(array_length)}),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add complex array member to type builder (via builder)");
+    "Could not add complex array member to type builder (via builder)"
+  );
 }
 
 
@@ -988,5 +1040,6 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member_builder(
         static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
         {fastrtps__size_t_to_uint32_t(sequence_bound)}),
       std::string(default_value, default_value_length).c_str()),
-    "Could not add complex bounded sequence member to type builder");
+    "Could not add complex bounded sequence member to type builder"
+  );
 }

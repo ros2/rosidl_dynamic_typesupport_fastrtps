@@ -23,11 +23,13 @@
 
 
 /// Convert size_t to uint32_t, with limit checking
+/// `in` must be smaller than std::numeric_limits<uint32_t>::max()
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 uint32_t
 fastrtps__size_t_to_uint32_t(size_t in);
 
 /// u16string copy
+/// `dest` and `src` cannot be NULL, this method will return NULL in those cases
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 char16_t *
 fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n);

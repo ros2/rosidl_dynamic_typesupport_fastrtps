@@ -32,10 +32,10 @@
  */
 #define FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(statement_with_return_code, msg) \
   do { \
-    eprosima::fastrtps::types::ReturnCode_t ret = statement_with_return_code; \
-    if (ret != eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK) { \
+    eprosima::fastrtps::types::ReturnCode_t macro_ret_ = statement_with_return_code; \
+    if (macro_ret_ != eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK) { \
       RCUTILS_SET_ERROR_MSG(msg); \
-      return fastrtps__convert_fastrtps_ret_to_rcl_ret(ret); \
+      return fastrtps__convert_fastrtps_ret_to_rcl_ret(macro_ret_); \
     } \
   } while (0)
 
@@ -48,10 +48,10 @@
  */
 #define FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(statement_with_return_code, msg) \
   do { \
-    eprosima::fastrtps::types::ReturnCode_t ret = statement_with_return_code; \
-    if (ret != eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK) { \
+    eprosima::fastrtps::types::ReturnCode_t macro_ret_ = statement_with_return_code; \
+    if (macro_ret_ != eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK) { \
       RCUTILS_SET_ERROR_MSG(msg); \
-      return fastrtps__convert_fastrtps_ret_to_rcl_ret(ret); \
+      return fastrtps__convert_fastrtps_ret_to_rcl_ret(macro_ret_); \
     } else { \
       return RCUTILS_RET_OK; \
     } \

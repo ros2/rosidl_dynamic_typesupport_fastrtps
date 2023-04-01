@@ -26,31 +26,35 @@
 
 // DYNAMIC TYPE UTILS =======================================================================
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-bool
+rcutils_ret_t
 fastrtps__dynamic_type_equals(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * other_type_impl);
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * other_type_impl,
+  bool * equals);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-size_t
+rcutils_ret_t
 fastrtps__dynamic_type_get_member_count(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl);
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
+  size_t * member_count);  // OUT
 
 
 // DYNAMIC TYPE CONSTRUCTION =======================================================================
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_builder_init(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const char * name, size_t name_length);
+  const char * name, size_t name_length,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t ** type_builder_impl);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_builder_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * other);
+  const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * other,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t ** type_builder_impl);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
@@ -59,16 +63,18 @@ fastrtps__dynamic_type_builder_fini(
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl);
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rosidl_dynamic_typesupport_dynamic_type_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_init_from_dynamic_type_builder(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl);
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
+  rosidl_dynamic_typesupport_dynamic_type_impl_t ** type_impl);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rosidl_dynamic_typesupport_dynamic_type_impl_t *
+rcutils_ret_t
 fastrtps__dynamic_type_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl);
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
+  rosidl_dynamic_typesupport_dynamic_type_impl_t ** type_impl_out);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
@@ -77,17 +83,20 @@ fastrtps__dynamic_type_fini(
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl);
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-const char *
+rcutils_ret_t
 fastrtps__dynamic_type_get_name(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl, size_t * name_length);
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
+  const char ** name,  // OUT
+  size_t * name_length);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-const char *
+rcutils_ret_t
 fastrtps__dynamic_type_builder_get_name(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  size_t * name_length);
+  const char ** name,  // OUT
+  size_t * name_length);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
