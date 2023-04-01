@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__UTILS_HPP_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__UTILS_HPP_
+#ifndef DETAIL__UTILS_HPP_
+#define DETAIL__UTILS_HPP_
 
+#include <fastrtps/types/TypesBase.h>
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 #include <rcutils/types/rcutils_ret.h>
 #include <string>
 
-#include <fastrtps/types/TypesBase.h>
 
 
 /// Convert size_t to uint32_t, with limit checking
@@ -55,4 +55,4 @@ rcutils_ret_t
 fastrtps__convert_fastrtps_ret_to_rcl_ret(eprosima::fastrtps::types::ReturnCode_t fastrtps_ret);
 
 
-#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__UTILS_HPP_
+#endif  // DETAIL__UTILS_HPP_

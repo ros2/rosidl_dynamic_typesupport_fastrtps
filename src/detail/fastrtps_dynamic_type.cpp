@@ -13,12 +13,6 @@
 // limitations under the License.
 
 #include "fastrtps_dynamic_type.hpp"
-#include "fastrtps_serialization_support_impl_handle.hpp"
-#include "macros.hpp"
-#include "utils.hpp"
-
-#include <string.h>
-#include <string>
 
 #include <fastrtps/types/DynamicType.h>
 #include <fastrtps/types/DynamicTypePtr.h>
@@ -37,6 +31,13 @@
 
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 #include <rosidl_dynamic_typesupport/types.h>
+
+#include <string>
+#include <utility>
+
+#include "fastrtps_serialization_support_impl_handle.hpp"
+#include "macros.hpp"
+#include "utils.hpp"
 
 
 // using eprosima::fastrtps::types::DynamicType;  // Conflicts in this scope for some reason...
@@ -829,7 +830,8 @@ fastrtps__dynamic_type_builder_add_bounded_string_bounded_sequence_member(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
       id, std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
-        fastrtps_impl->type_factory_->create_string_type(fastrtps__size_t_to_uint32_t(string_bound)),
+        fastrtps_impl->type_factory_->create_string_type(
+          fastrtps__size_t_to_uint32_t(string_bound)),
         {fastrtps__size_t_to_uint32_t(sequence_bound)}),
       std::string(default_value, default_value_length).c_str()),
     "Could not add bounded `string` bounded sequence member to type builder"
@@ -854,7 +856,8 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_bounded_sequence_member(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
       id, std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
-        fastrtps_impl->type_factory_->create_wstring_type(fastrtps__size_t_to_uint32_t(wstring_bound)),
+        fastrtps_impl->type_factory_->create_wstring_type(
+          fastrtps__size_t_to_uint32_t(wstring_bound)),
         {fastrtps__size_t_to_uint32_t(sequence_bound)}),
       std::string(default_value, default_value_length).c_str()),
     "Could not add bounded `wstring` bounded sequence member to type builder"

@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "macros.hpp"
-
-#include "fastrtps_serialization_support_impl_handle.hpp"
 #include <fastrtps/types/TypesBase.h>
 #include <rcutils/types/rcutils_ret.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
+
+#include "fastrtps_serialization_support_impl_handle.hpp"
+#include "macros.hpp"
 
 
 rcutils_ret_t
@@ -25,7 +25,8 @@ fastrtps__serialization_support_impl_handle_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl)
 {
   auto fastrtps_serialization_support_handle =
-    static_cast<fastrtps__serialization_support_impl_handle_t *>(serialization_support_impl->handle);
+    static_cast<fastrtps__serialization_support_impl_handle_t *>(
+      serialization_support_impl->handle);
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     fastrtps_serialization_support_handle->type_factory_->delete_instance(),

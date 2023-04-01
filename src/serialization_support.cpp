@@ -35,15 +35,18 @@ rosidl_dynamic_typesupport_serialization_support_impl_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl()
 {
   rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl =
-    (rosidl_dynamic_typesupport_serialization_support_impl_t *) allocator.zero_allocate(
-    1, sizeof(rosidl_dynamic_typesupport_serialization_support_impl_t), &allocator.state);
+  auto serialization_support_impl =
+    static_cast<rosidl_dynamic_typesupport_serialization_support_impl_t *>(
+    allocator.zero_allocate(
+      1, sizeof(rosidl_dynamic_typesupport_serialization_support_impl_t), &allocator.state)
+    );
   serialization_support_impl->library_identifier =
     fastrtps_serialization_support_library_identifier;
 
-  fastrtps__serialization_support_impl_handle_t * serialization_support_impl_handle =
-    (fastrtps__serialization_support_impl_handle_t *) allocator.zero_allocate(
-    1, sizeof(fastrtps__serialization_support_impl_handle_t), &allocator.state);
+  auto serialization_support_impl_handle =
+    static_cast<fastrtps__serialization_support_impl_handle_t *>(
+    allocator.zero_allocate(
+      1, sizeof(fastrtps__serialization_support_impl_handle_t), &allocator.state));
 
   // The actual business
   serialization_support_impl_handle->type_factory_ =
@@ -64,9 +67,11 @@ rosidl_dynamic_typesupport_serialization_support_interface_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 {
   rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  rosidl_dynamic_typesupport_serialization_support_interface_t * serialization_support_interface =
-    (rosidl_dynamic_typesupport_serialization_support_interface_t *) allocator.zero_allocate(
-    1, sizeof(rosidl_dynamic_typesupport_serialization_support_interface_t), &allocator.state);
+  auto serialization_support_interface =
+    static_cast<rosidl_dynamic_typesupport_serialization_support_interface_t *>(
+    allocator.zero_allocate(
+      1, sizeof(rosidl_dynamic_typesupport_serialization_support_interface_t), &allocator.state)
+    );
 
 
   // CORE ==========================================================================================
@@ -996,6 +1001,5 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       rosidl_dynamic_typesupport_member_id_t *))
     fastrtps__dynamic_data_insert_complex_value;
 
-
   return serialization_support_interface;
-}
+}  // NOLINT(readability/fn_size)

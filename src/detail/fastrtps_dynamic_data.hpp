@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_
+#ifndef DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_
+#define DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_
 
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 
@@ -96,7 +96,8 @@ fastrtps__dynamic_data_loan_value(
   rosidl_dynamic_typesupport_member_id_t id,
   rosidl_dynamic_typesupport_dynamic_data_impl_t ** loaned_data_impl);  // OUT
 
-// The passed 'inner_data_impl' arg to return must be the immediate child of the passed 'data_impl' arg
+// The passed 'inner_data_impl' arg to return must be the immediate child of the passed 'data_impl'
+// arg
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
 fastrtps__dynamic_data_return_loaned_value(
@@ -220,8 +221,8 @@ rcutils_ret_t
 fastrtps__dynamic_data_get_float128_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, long
-  double * value);  // OUT
+  rosidl_dynamic_typesupport_member_id_t id,
+  long double * value);  // OUT  // NOLINT(runtime/int)
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
@@ -709,4 +710,4 @@ fastrtps__dynamic_data_insert_complex_value(
   rosidl_dynamic_typesupport_member_id_t * out_id);  // OUT
 
 
-#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_
+#endif  // DETAIL__FASTRTPS_DYNAMIC_DATA_HPP_

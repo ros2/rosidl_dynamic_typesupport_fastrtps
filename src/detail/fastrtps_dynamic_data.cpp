@@ -13,25 +13,29 @@
 // limitations under the License.
 
 #include "fastrtps_dynamic_data.hpp"
-#include "macros.hpp"
-#include "fastrtps_serialization_support_impl_handle.hpp"
-#include "utils.hpp"
-
-#include <algorithm>
-#include <codecvt>
-#include <cstring>
-#include <cwchar>
-#include <locale>
 
 #include <fastdds/rtps/common/SerializedPayload.h>
 
-#include <fastrtps/types/DynamicDataHelper.hpp>
 #include <fastrtps/types/DynamicPubSubType.h>
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/types/uint8_array.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
+
+#include <algorithm>
+#include <codecvt>
+#include <cstring>
+#include <cwchar>
+#include <locale>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include <fastrtps/types/DynamicDataHelper.hpp>
+#include "macros.hpp"
+#include "fastrtps_serialization_support_impl_handle.hpp"
+#include "utils.hpp"
 
 
 using eprosima::fastrtps::types::DynamicData;
@@ -269,7 +273,7 @@ fastrtps__dynamic_data_clone(
 {
   DynamicData * data_impl_handle = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle)->data_factory_->create_copy(
-      static_cast<const DynamicData *>(other_data_impl->handle));
+    static_cast<const DynamicData *>(other_data_impl->handle));
   if (!data_impl_handle) {
     RCUTILS_SET_ERROR_MSG("Could not clone struct type builder");
     return RCUTILS_RET_ERROR;

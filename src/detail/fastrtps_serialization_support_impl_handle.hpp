@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_H_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_H_
+#ifndef DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_HPP_
+#define DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_HPP_
 
 #include <fastrtps/types/DynamicDataFactory.h>
 #include <fastrtps/types/DynamicTypeBuilderFactory.h>
@@ -36,4 +36,4 @@ fastrtps__serialization_support_impl_handle_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);
 
 
-#endif // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_HPP_  // NOLINT
+#endif  // DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_HPP_

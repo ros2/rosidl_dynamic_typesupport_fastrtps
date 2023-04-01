@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__MACROS_HPP_
-#define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__MACROS_HPP_
+#ifndef DETAIL__MACROS_HPP_
+#define DETAIL__MACROS_HPP_
 
-#include "utils.hpp"
 #include <fastrtps/types/TypesBase.h>
-
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/error_handling.h>
+
+#include "utils.hpp"
 
 
 /// Check ReturnCode_t, and return its equivalent rcutils_ret_t if not ok, with an error message.
@@ -64,4 +64,4 @@
 #define FASTRTPS_EXPAND(x) FASTRTPS_EXPAND2(x)
 #define FASTRTPS_EXPAND2(x) x
 
-#endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__MACROS_HPP_
+#endif  // DETAIL__MACROS_HPP_

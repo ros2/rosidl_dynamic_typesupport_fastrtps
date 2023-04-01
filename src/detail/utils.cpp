@@ -14,12 +14,12 @@
 
 #include "utils.hpp"
 
+#include <fastrtps/types/TypesBase.h>
+
 #include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <string>
-
-#include <fastrtps/types/TypesBase.h>
 
 
 uint32_t
