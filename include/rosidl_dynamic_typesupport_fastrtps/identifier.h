@@ -15,11 +15,15 @@
 #ifndef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__IDENTIFIER_H_
 #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__IDENTIFIER_H_
 
+#include "rosidl_dynamic_typesupport_fastrtps/visibility_control.h"
+
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 extern const char * const fastrtps_serialization_support_library_identifier;
 
 

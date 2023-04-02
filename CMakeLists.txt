@@ -25,8 +25,10 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 find_package(ament_cmake_ros REQUIRED)
 find_package(rcutils REQUIRED)
 find_package(rosidl_dynamic_typesupport REQUIRED)
-find_package(fastcdr REQUIRED)
-find_package(fastrtps "2.8.0" REQUIRED)
+find_package(fastrtps_cmake_module REQUIRED)
+find_package(fastcdr REQUIRED CONFIG)
+find_package(fastrtps 2.3 REQUIRED CONFIG)
+find_package(FastRTPS 2.3 REQUIRED MODULE)
 
 
 # TARGETS ==========================================================================================
@@ -39,6 +41,10 @@ add_library(${PROJECT_NAME}
   "src/identifier.cpp"
   "src/serialization_support.cpp"
 )
+if(WIN32)
+  target_compile_definitions(${PROJECT_NAME}
+    PRIVATE "ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_BUILDING_DLL")
+endif()
 target_include_directories(${PROJECT_NAME} PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>"
@@ -62,8 +68,6 @@ install(DIRECTORY include/
 )
 
 ament_export_targets(${PROJECT_NAME}-export HAS_LIBRARY_TARGET)
-ament_export_dependencies(fastcdr)
-ament_export_dependencies(fastrtps)
 ament_export_dependencies(rcutils)
 ament_export_dependencies(rosidl_dynamic_typesupport)
 

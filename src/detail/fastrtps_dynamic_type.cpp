@@ -295,7 +295,7 @@ fastrtps__dynamic_type_builder_set_name(
  \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
-        id, std::string(name, name_length).c_str(), \
+        fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(), \
         fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
         std::string(default_value, default_value_length).c_str()), \
       "Could not add `" #MemberT "` member to type builder" \
@@ -399,7 +399,7 @@ fastrtps__dynamic_type_builder_add_bounded_string_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_string_type(fastrtps__size_t_to_uint32_t(string_bound)),
       std::string(default_value, default_value_length).c_str()),
     "Could not add string member"
@@ -421,7 +421,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_wstring_type(
         fastrtps__size_t_to_uint32_t(wstring_bound)),
       std::string(default_value, default_value_length).c_str()),
@@ -446,7 +446,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_member(
  \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
-        id, std::string(name, name_length).c_str(), \
+        fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(), \
         fastrtps_impl->type_factory_->create_array_builder( \
           fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
           {fastrtps__size_t_to_uint32_t(array_length)}), \
@@ -557,7 +557,7 @@ fastrtps__dynamic_type_builder_add_bounded_string_array_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_array_builder(
         fastrtps_impl->type_factory_->create_string_type(
           fastrtps__size_t_to_uint32_t(string_bound)),
@@ -583,7 +583,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_array_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_array_builder(
         fastrtps_impl->type_factory_->create_wstring_type(
           fastrtps__size_t_to_uint32_t(wstring_bound)),
@@ -606,7 +606,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_array_member(
   { \
     return fastrtps__dynamic_type_builder_add_ ## FunctionT ## _bounded_sequence_member( \
       serialization_support_impl, type_builder_impl, \
-      id, name, name_length, default_value, default_value_length, \
+      fastrtps__size_t_to_uint32_t(id), name, name_length, default_value, default_value_length, \
       CONTAINER_UNLIMITED); \
   }
 
@@ -719,7 +719,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_unbounded_sequence_member(
  \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member( \
-        id, std::string(name, name_length).c_str(), \
+        fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(), \
         fastrtps_impl->type_factory_->create_sequence_builder( \
           fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
           {fastrtps__size_t_to_uint32_t(sequence_bound)}), \
@@ -828,7 +828,7 @@ fastrtps__dynamic_type_builder_add_bounded_string_bounded_sequence_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
         fastrtps_impl->type_factory_->create_string_type(
           fastrtps__size_t_to_uint32_t(string_bound)),
@@ -854,7 +854,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_bounded_sequence_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
         fastrtps_impl->type_factory_->create_wstring_type(
           fastrtps__size_t_to_uint32_t(wstring_bound)),
@@ -882,7 +882,7 @@ fastrtps__dynamic_type_builder_add_complex_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       nested_struct_dynamictype_ptr,
       std::string(default_value, default_value_length).c_str()),
     "Could not add complex member to type builder"
@@ -908,7 +908,7 @@ fastrtps__dynamic_type_builder_add_complex_array_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_array_builder(
         nested_struct_dynamictype_ptr, {fastrtps__size_t_to_uint32_t(array_length)}),
       std::string(default_value, default_value_length).c_str()),
@@ -951,7 +951,7 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
         nested_struct_dynamictype_ptr, {fastrtps__size_t_to_uint32_t(sequence_bound)}),
       std::string(default_value, default_value_length).c_str()),
@@ -973,7 +973,7 @@ fastrtps__dynamic_type_builder_add_complex_member_builder(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
       std::string(default_value, default_value_length).c_str()),
     "Could not add complex member to type builder (via builder)"
@@ -996,7 +996,7 @@ fastrtps__dynamic_type_builder_add_complex_array_member_builder(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_array_builder(
         static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
         {fastrtps__size_t_to_uint32_t(array_length)}),
@@ -1038,7 +1038,7 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member_builder(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
-      id, std::string(name, name_length).c_str(),
+      fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
         static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
         {fastrtps__size_t_to_uint32_t(sequence_bound)}),

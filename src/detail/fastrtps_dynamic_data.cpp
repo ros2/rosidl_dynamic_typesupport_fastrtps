@@ -85,7 +85,8 @@ fastrtps__dynamic_data_clear_value(
 {
   (void) serialization_support_impl;
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
-    static_cast<DynamicData *>(data_impl->handle)->clear_value(id),
+    static_cast<DynamicData *>(data_impl->handle)->clear_value(
+      fastrtps__size_t_to_uint32_t(id)),
     "Could not clear value"
   );
 }
@@ -169,7 +170,8 @@ fastrtps__dynamic_data_loan_value(
 {
   (void) serialization_support_impl;
   DynamicData * loaned_data_impl_handle =
-    static_cast<DynamicData *>(data_impl->handle)->loan_value(id);
+    static_cast<DynamicData *>(data_impl->handle)->loan_value(
+      fastrtps__size_t_to_uint32_t(id));
   if (!loaned_data_impl_handle) {
     RCUTILS_SET_ERROR_MSG("Could not loan dynamic data");
     return RCUTILS_RET_ERROR;
@@ -729,7 +731,8 @@ fastrtps__dynamic_data_remove_sequence_data(
 {
   (void) serialization_support_impl;
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
-    static_cast<DynamicData *>(data_impl->handle)->remove_sequence_data(id),
+    static_cast<DynamicData *>(data_impl->handle)->remove_sequence_data(
+      fastrtps__size_t_to_uint32_t(id)),
     "Could not remove sequence data"
   );
 }
