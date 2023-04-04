@@ -35,7 +35,7 @@ find_package(FastRTPS 2.3 REQUIRED MODULE)
 add_library(${PROJECT_NAME}
   "src/detail/fastrtps_dynamic_data.cpp"
   "src/detail/fastrtps_dynamic_type.cpp"
-  "src/detail/fastrtps_serialization_support_impl_handle.cpp"
+  "src/detail/fastrtps_serialization_support.cpp"
   "src/detail/utils.cpp"
 
   "src/identifier.cpp"

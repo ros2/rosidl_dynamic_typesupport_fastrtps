@@ -16,7 +16,6 @@
 #include <rosidl_dynamic_typesupport/types.h>
 
 #include <rcutils/types/uint8_array.h>
-#include <rcutils/allocator.h>
 #include <rosidl_dynamic_typesupport_fastrtps/identifier.h>
 #include <rosidl_dynamic_typesupport_fastrtps/serialization_support.h>
 
@@ -25,7 +24,7 @@
 
 #include "detail/fastrtps_dynamic_data.hpp"
 #include "detail/fastrtps_dynamic_type.hpp"
-#include "detail/fastrtps_serialization_support_impl_handle.hpp"
+#include "detail/fastrtps_serialization_support.hpp"
 
 
 // =================================================================================================
@@ -34,19 +33,11 @@
 rosidl_dynamic_typesupport_serialization_support_impl_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl()
 {
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  auto serialization_support_impl =
-    static_cast<rosidl_dynamic_typesupport_serialization_support_impl_t *>(
-    allocator.zero_allocate(
-      1, sizeof(rosidl_dynamic_typesupport_serialization_support_impl_t), &allocator.state)
-    );
+  auto serialization_support_impl = new rosidl_dynamic_typesupport_serialization_support_impl_t();
   serialization_support_impl->library_identifier =
     fastrtps_serialization_support_library_identifier;
 
-  auto serialization_support_impl_handle =
-    static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    allocator.zero_allocate(
-      1, sizeof(fastrtps__serialization_support_impl_handle_t), &allocator.state));
+  auto serialization_support_impl_handle = new fastrtps__serialization_support_impl_handle_t();
 
   // The actual business
   serialization_support_impl_handle->type_factory_ =
@@ -66,22 +57,22 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl()
 rosidl_dynamic_typesupport_serialization_support_interface_t *
 rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 {
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
   auto serialization_support_interface =
-    static_cast<rosidl_dynamic_typesupport_serialization_support_interface_t *>(
-    allocator.zero_allocate(
-      1, sizeof(rosidl_dynamic_typesupport_serialization_support_interface_t), &allocator.state)
-    );
-
+    new rosidl_dynamic_typesupport_serialization_support_interface_t();
 
   // CORE ==========================================================================================
   serialization_support_interface->library_identifier =
     fastrtps_serialization_support_library_identifier;
 
-  serialization_support_interface->serialization_support_impl_handle_fini =
+  serialization_support_interface->serialization_support_impl_destroy =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *))
-    fastrtps__serialization_support_impl_handle_fini;
+    fastrtps__serialization_support_impl_destroy;
+
+  serialization_support_interface->serialization_support_interface_destroy =
+    (rcutils_ret_t (*)(
+      rosidl_dynamic_typesupport_serialization_support_interface_t *))
+    fastrtps__serialization_support_interface_destroy;
 
 
   // ===============================================================================================
@@ -120,11 +111,11 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t **))
     fastrtps__dynamic_type_builder_clone;
 
-  serialization_support_interface->dynamic_type_builder_fini =
+  serialization_support_interface->dynamic_type_builder_destroy =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *))
-    fastrtps__dynamic_type_builder_fini;
+    fastrtps__dynamic_type_builder_destroy;
 
   serialization_support_interface->dynamic_type_init_from_dynamic_type_builder =
     (rcutils_ret_t (*)(
@@ -140,11 +131,11 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       rosidl_dynamic_typesupport_dynamic_type_impl_t **))
     fastrtps__dynamic_type_clone;
 
-  serialization_support_interface->dynamic_type_fini =
+  serialization_support_interface->dynamic_type_destroy =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_impl_t *))
-    fastrtps__dynamic_type_fini;
+    fastrtps__dynamic_type_destroy;
 
   serialization_support_interface->dynamic_type_get_name =
     (rcutils_ret_t (*)(
@@ -692,11 +683,11 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       rosidl_dynamic_typesupport_dynamic_data_impl_t **))
     fastrtps__dynamic_data_clone;
 
-  serialization_support_interface->dynamic_data_fini =
+  serialization_support_interface->dynamic_data_destroy =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_data_impl_t *))
-    fastrtps__dynamic_data_fini;
+    fastrtps__dynamic_data_destroy;
 
 
   // DYNAMIC DATA SERIALIZATION

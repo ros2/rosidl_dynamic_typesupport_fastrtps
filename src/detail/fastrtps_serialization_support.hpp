@@ -32,8 +32,12 @@ typedef struct fastrtps__serialization_support_impl_handle_s
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__serialization_support_impl_handle_fini(
+fastrtps__serialization_support_impl_destroy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);
 
+ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
+rcutils_ret_t
+fastrtps__serialization_support_interface_destroy(
+  rosidl_dynamic_typesupport_serialization_support_interface_t * serialization_support_interface);
 
 #endif  // DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_IMPL_HANDLE_HPP_

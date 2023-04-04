@@ -58,7 +58,7 @@ fastrtps__dynamic_type_builder_clone(
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_type_builder_fini(
+fastrtps__dynamic_type_builder_destroy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl);
 
@@ -78,7 +78,7 @@ fastrtps__dynamic_type_clone(
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_type_fini(
+fastrtps__dynamic_type_destroy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl);
 

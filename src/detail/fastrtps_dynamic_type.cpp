@@ -35,7 +35,7 @@
 #include <string>
 #include <utility>
 
-#include "fastrtps_serialization_support_impl_handle.hpp"
+#include "fastrtps_serialization_support.hpp"
 #include "macros.hpp"
 #include "utils.hpp"
 
@@ -137,17 +137,19 @@ fastrtps__dynamic_type_builder_clone(
 
 
 rcutils_ret_t
-fastrtps__dynamic_type_builder_fini(
+fastrtps__dynamic_type_builder_destroy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)
 {
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
-  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     fastrtps_impl->type_factory_->delete_builder(
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)),
     "Could not delete type builder"
   );
+  delete type_builder_impl;
+  return RCUTILS_RET_OK;
 }
 
 
@@ -212,7 +214,7 @@ fastrtps__dynamic_type_clone(
 
 
 rcutils_ret_t
-fastrtps__dynamic_type_fini(
+fastrtps__dynamic_type_destroy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
 {
@@ -221,9 +223,10 @@ fastrtps__dynamic_type_fini(
   auto type = eprosima::fastrtps::types::DynamicType_ptr(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
 
-  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     fastrtps_impl->type_factory_->delete_type(type.get()), "Could not delete type"
   );
+  delete type_impl;
   return RCUTILS_RET_OK;
 }
 

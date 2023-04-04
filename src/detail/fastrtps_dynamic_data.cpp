@@ -34,7 +34,7 @@
 
 #include <fastrtps/types/DynamicDataHelper.hpp>
 #include "macros.hpp"
-#include "fastrtps_serialization_support_impl_handle.hpp"
+#include "fastrtps_serialization_support.hpp"
 #include "utils.hpp"
 
 
@@ -190,11 +190,13 @@ fastrtps__dynamic_data_return_loaned_value(
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * inner_data_impl)
 {
   (void) serialization_support_impl;
-  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     static_cast<DynamicData *>(data_impl->handle)
     ->return_loaned_value(static_cast<const DynamicData *>(inner_data_impl->handle)),
     "Could not return loaned value"
   );
+  delete inner_data_impl;
+  return RCUTILS_RET_OK;
 }
 
 
@@ -289,15 +291,17 @@ fastrtps__dynamic_data_clone(
 
 
 rcutils_ret_t
-fastrtps__dynamic_data_fini(
+fastrtps__dynamic_data_destroy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
-  FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
+  FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     static_cast<fastrtps__serialization_support_impl_handle_t *>(serialization_support_impl->handle)
     ->data_factory_->delete_data(static_cast<DynamicData *>(data_impl->handle)),
     "Could not delete data"
   );
+  delete data_impl;
+  return RCUTILS_RET_OK;
 }
 
 
