@@ -17,10 +17,10 @@
 
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 
-#include <uchar.h>
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/types/uint8_array.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
+#include <rosidl_dynamic_typesupport/uchar.h>
 
 
 // =================================================================================================

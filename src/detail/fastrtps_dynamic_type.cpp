@@ -725,7 +725,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_unbounded_sequence_member(
         fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(), \
         fastrtps_impl->type_factory_->create_sequence_builder( \
           fastrtps_impl->type_factory_->create_ ## MemberT ## _type(), \
-          {fastrtps__size_t_to_uint32_t(sequence_bound)}), \
+          fastrtps__size_t_to_uint32_t(sequence_bound)), \
         std::string(default_value, default_value_length).c_str()), \
       "Could not add `" #MemberT "` bounded sequence member to type builder" \
     ); \
@@ -835,7 +835,7 @@ fastrtps__dynamic_type_builder_add_bounded_string_bounded_sequence_member(
       fastrtps_impl->type_factory_->create_sequence_builder(
         fastrtps_impl->type_factory_->create_string_type(
           fastrtps__size_t_to_uint32_t(string_bound)),
-        {fastrtps__size_t_to_uint32_t(sequence_bound)}),
+        fastrtps__size_t_to_uint32_t(sequence_bound)),
       std::string(default_value, default_value_length).c_str()),
     "Could not add bounded `string` bounded sequence member to type builder"
   );
@@ -861,7 +861,7 @@ fastrtps__dynamic_type_builder_add_bounded_wstring_bounded_sequence_member(
       fastrtps_impl->type_factory_->create_sequence_builder(
         fastrtps_impl->type_factory_->create_wstring_type(
           fastrtps__size_t_to_uint32_t(wstring_bound)),
-        {fastrtps__size_t_to_uint32_t(sequence_bound)}),
+        fastrtps__size_t_to_uint32_t(sequence_bound)),
       std::string(default_value, default_value_length).c_str()),
     "Could not add bounded `wstring` bounded sequence member to type builder"
   );
@@ -956,7 +956,7 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->add_member(
       fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
-        nested_struct_dynamictype_ptr, {fastrtps__size_t_to_uint32_t(sequence_bound)}),
+        nested_struct_dynamictype_ptr, fastrtps__size_t_to_uint32_t(sequence_bound)),
       std::string(default_value, default_value_length).c_str()),
     "Could not add complex bounded sequence member to type builder"
   );
@@ -1044,7 +1044,7 @@ fastrtps__dynamic_type_builder_add_complex_bounded_sequence_member_builder(
       fastrtps__size_t_to_uint32_t(id), std::string(name, name_length).c_str(),
       fastrtps_impl->type_factory_->create_sequence_builder(
         static_cast<DynamicTypeBuilder *>(nested_struct_builder->handle),
-        {fastrtps__size_t_to_uint32_t(sequence_bound)}),
+        fastrtps__size_t_to_uint32_t(sequence_bound)),
       std::string(default_value, default_value_length).c_str()),
     "Could not add complex bounded sequence member to type builder"
   );
