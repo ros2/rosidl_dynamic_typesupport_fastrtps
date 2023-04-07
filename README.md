@@ -5,7 +5,7 @@ This library provides implementations for the interface specified in the `rosidl
 
 ```c++
 rosidl_dynamic_typesupport_serialization_support_t * serialization_support =
-  rosidl_dynamic_typesupport_serialization_support_init(
+  rosidl_dynamic_typesupport_serialization_support_create(
     rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl(),
     rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface());
 ```

@@ -96,13 +96,13 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
 
   // DYNAMIC TYPE CONSTRUCTION
-  serialization_support_interface->dynamic_type_builder_init =
+  serialization_support_interface->dynamic_type_builder_create =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       const char *,
       size_t,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t **))
-    fastrtps__dynamic_type_builder_init;
+    fastrtps__dynamic_type_builder_create;
 
   serialization_support_interface->dynamic_type_builder_clone =
     (rcutils_ret_t (*)(
@@ -117,12 +117,12 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *))
     fastrtps__dynamic_type_builder_destroy;
 
-  serialization_support_interface->dynamic_type_init_from_dynamic_type_builder =
+  serialization_support_interface->dynamic_type_create_from_dynamic_type_builder =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_impl_t **))
-    fastrtps__dynamic_type_init_from_dynamic_type_builder;
+    fastrtps__dynamic_type_create_from_dynamic_type_builder;
 
   serialization_support_interface->dynamic_type_clone =
     (rcutils_ret_t (*)(
@@ -662,19 +662,19 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
 
 
   // DYNAMIC DATA CONSTRUCTION
-  serialization_support_interface->dynamic_data_init_from_dynamic_type_builder =
+  serialization_support_interface->dynamic_data_create_from_dynamic_type_builder =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_builder_impl_t *,
       rosidl_dynamic_typesupport_dynamic_data_impl_t **))
-    fastrtps__dynamic_data_init_from_dynamic_type_builder;
+    fastrtps__dynamic_data_create_from_dynamic_type_builder;
 
-  serialization_support_interface->dynamic_data_init_from_dynamic_type =
+  serialization_support_interface->dynamic_data_create_from_dynamic_type =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,
       rosidl_dynamic_typesupport_dynamic_type_impl_t *,
       rosidl_dynamic_typesupport_dynamic_data_impl_t **))
-    fastrtps__dynamic_data_init_from_dynamic_type;
+    fastrtps__dynamic_data_create_from_dynamic_type;
 
   serialization_support_interface->dynamic_data_clone =
     (rcutils_ret_t (*)(

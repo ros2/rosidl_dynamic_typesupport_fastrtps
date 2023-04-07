@@ -228,7 +228,7 @@ fastrtps__dynamic_data_get_name(
 
 // DYNAMIC DATA CONSTRUCTION =======================================================================
 rcutils_ret_t
-fastrtps__dynamic_data_init_from_dynamic_type_builder(
+fastrtps__dynamic_data_create_from_dynamic_type_builder(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl)
@@ -246,7 +246,7 @@ fastrtps__dynamic_data_init_from_dynamic_type_builder(
 }
 
 rcutils_ret_t
-fastrtps__dynamic_data_init_from_dynamic_type(
+fastrtps__dynamic_data_create_from_dynamic_type(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl)

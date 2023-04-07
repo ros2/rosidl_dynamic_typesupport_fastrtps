@@ -44,7 +44,7 @@ fastrtps__dynamic_type_get_member_count(
 // DYNAMIC TYPE CONSTRUCTION =======================================================================
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_type_builder_init(
+fastrtps__dynamic_type_builder_create(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const char * name, size_t name_length,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t ** type_builder_impl);  // OUT
@@ -64,7 +64,7 @@ fastrtps__dynamic_type_builder_destroy(
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_type_init_from_dynamic_type_builder(
+fastrtps__dynamic_type_create_from_dynamic_type_builder(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t ** type_impl);  // OUT
