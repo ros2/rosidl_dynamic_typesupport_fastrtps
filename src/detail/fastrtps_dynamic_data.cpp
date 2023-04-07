@@ -19,6 +19,9 @@
 #include <fastrtps/types/DynamicPubSubType.h>
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 
+#include <string.h>
+
+#include <rcutils/strdup.h>
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/types/uint8_array.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
@@ -171,7 +174,7 @@ fastrtps__dynamic_data_loan_value(
   (void) serialization_support_impl;
   DynamicData * loaned_data_impl_handle =
     static_cast<DynamicData *>(data_impl->handle)->loan_value(
-      fastrtps__size_t_to_uint32_t(id));
+    fastrtps__size_t_to_uint32_t(id));
   if (!loaned_data_impl_handle) {
     RCUTILS_SET_ERROR_MSG("Could not loan dynamic data");
     return RCUTILS_RET_ERROR;
@@ -220,7 +223,7 @@ fastrtps__dynamic_data_get_name(
 {
   (void) serialization_support_impl;
   std::string tmp_name = static_cast<DynamicData *>(data_impl->handle)->get_name();
-  *name = strdup(tmp_name.c_str());
+  *name = rcutils_strdup(tmp_name.c_str(), rcutils_get_default_allocator());
   *name_length = tmp_name.size();
   return RCUTILS_RET_OK;
 }
@@ -364,7 +367,7 @@ fastrtps__dynamic_data_deserialize(
   // memcpy(payload->data, buffer->buffer, buffer->buffer_length);
 
   payload->data = buffer->buffer;  // Use the input buffer directly without copying
-  payload->length = buffer->buffer_length;
+  payload->length = fastrtps__size_t_to_uint32_t(buffer->buffer_length);
 
   auto m_type = std::make_shared<eprosima::fastrtps::types::DynamicPubSubType>();
   *success = m_type->deserialize(payload.get(), data_impl->handle);
@@ -391,7 +394,8 @@ fastrtps__dynamic_data_deserialize(
   { \
     (void) serialization_support_impl; \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
-      static_cast<const DynamicData *>(data_impl->handle)->get_ ## DataFnT ## _value(*value, id), \
+      static_cast<const DynamicData *>(data_impl->handle)->get_ ## DataFnT ## _value( \
+        *value, fastrtps__size_t_to_uint32_t(id)), \
       "Could not get `" #FunctionT "` value (of type `" #ValueT "`)" \
     ); \
   }
@@ -426,7 +430,8 @@ fastrtps__dynamic_data_get_wchar_value(
   wchar_t tmp_out;
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_char16_value(tmp_out, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_char16_value(
+      tmp_out, fastrtps__size_t_to_uint32_t(id)),
     "Could not get `wchar` value (of type `char16_t`)"
   );
 
@@ -445,13 +450,14 @@ fastrtps__dynamic_data_get_string_value(
   std::string tmp_string;
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(
+      tmp_string, fastrtps__size_t_to_uint32_t(id)),
     "Could not get `string` value (of type `string`)"
   );
 
   *value_length = tmp_string.size();
   char * tmp_out = new char[*value_length + 1];
-  strncpy(tmp_out, tmp_string.c_str(), *value_length);
+  memcpy(tmp_out, tmp_string.c_str(), *value_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
   return RCUTILS_RET_OK;
@@ -468,7 +474,8 @@ fastrtps__dynamic_data_get_wstring_value(
   std::wstring tmp_wstring;
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(
+      tmp_wstring, fastrtps__size_t_to_uint32_t(id)),
     "Could not get `wstring` value (of type `char16_t *`)"
   );
 
@@ -493,14 +500,15 @@ fastrtps__dynamic_data_get_fixed_string_value(
 
   // On the wire it's a bounded string
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(
+      tmp_string, fastrtps__size_t_to_uint32_t(id)),
     "Could not get fixed `string` value (of type `char *`)"
   );
 
   size_t copy_length = std::min(tmp_string.size(), string_length);
   *value_length = string_length;
   char * tmp_out = new char[*value_length + 1]();
-  strncpy(tmp_out, tmp_string.c_str(), copy_length);
+  memcpy(tmp_out, tmp_string.c_str(), copy_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
   return RCUTILS_RET_OK;
@@ -519,7 +527,8 @@ fastrtps__dynamic_data_get_fixed_wstring_value(
 
   // On the wire it's a bounded string
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(
+      tmp_wstring, fastrtps__size_t_to_uint32_t(id)),
     "Could not get fixed `wstring` value (of type `char16_t *`)"
   );
 
@@ -544,13 +553,14 @@ fastrtps__dynamic_data_get_bounded_string_value(
   std::string tmp_string;
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(tmp_string, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_string_value(
+      tmp_string, fastrtps__size_t_to_uint32_t(id)),
     "Could not get bounded `string` value (of type `char *`)"
   );
 
   *value_length = std::min(tmp_string.size(), string_bound);
   char * tmp_out = new char[*value_length + 1];
-  strncpy(tmp_out, tmp_string.c_str(), *value_length);
+  memcpy(tmp_out, tmp_string.c_str(), *value_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
   return RCUTILS_RET_OK;
@@ -568,7 +578,8 @@ fastrtps__dynamic_data_get_bounded_wstring_value(
   std::wstring tmp_wstring;
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(tmp_wstring, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_wstring_value(
+      tmp_wstring, fastrtps__size_t_to_uint32_t(id)),
     "Could not get bounded `wstring` value (of type `char16_t *`)"
   );
 
@@ -591,7 +602,8 @@ fastrtps__dynamic_data_get_bounded_wstring_value(
   { \
     (void) serialization_support_impl; \
     FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG( \
-      static_cast<DynamicData *>(data_impl->handle)->set_ ## DataFnT ## _value(value, id), \
+      static_cast<DynamicData *>(data_impl->handle)->set_ ## DataFnT ## _value( \
+        value, fastrtps__size_t_to_uint32_t(id)), \
       "Could not set `" #FunctionT "` value (of type `" #ValueT "`)" \
     ); \
   }
@@ -623,7 +635,8 @@ fastrtps__dynamic_data_set_string_value(
   (void) serialization_support_impl;
   const std::string tmp_string(value, value_length);
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
-    static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id),
+    static_cast<DynamicData *>(data_impl->handle)->set_string_value(
+      tmp_string, fastrtps__size_t_to_uint32_t(id)),
     "Could not set `string` value (of type `char *`)"
   );
 }
@@ -639,7 +652,7 @@ fastrtps__dynamic_data_set_wstring_value(
   const std::u16string tmp_u16string(value, value_length);
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
-      fastrtps__u16string_to_wstring(tmp_u16string), id),
+      fastrtps__u16string_to_wstring(tmp_u16string), fastrtps__size_t_to_uint32_t(id)),
     "Could not set `wstring` value (of type `char16_t *`)"
   );
 }
@@ -656,7 +669,8 @@ fastrtps__dynamic_data_set_fixed_string_value(
   std::string tmp_string(value, std::min(value_length, string_length));
   tmp_string.resize(string_length, '\0');
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
-    static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id),
+    static_cast<DynamicData *>(data_impl->handle)->set_string_value(
+      tmp_string, fastrtps__size_t_to_uint32_t(id)),
     "Could not set fixed `string` value (of type `char *`)"
   );
 }
@@ -674,7 +688,7 @@ fastrtps__dynamic_data_set_fixed_wstring_value(
   tmp_u16string.resize(wstring_length, '\0');
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
-      fastrtps__u16string_to_wstring(tmp_u16string), id),
+      fastrtps__u16string_to_wstring(tmp_u16string), fastrtps__size_t_to_uint32_t(id)),
     "Could not set fixed `wstring` value (of type `char16_t *`)"
   );
 }
@@ -690,7 +704,8 @@ fastrtps__dynamic_data_set_bounded_string_value(
   (void) serialization_support_impl;
   const std::string tmp_string(value, std::min(value_length, string_bound));
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
-    static_cast<DynamicData *>(data_impl->handle)->set_string_value(tmp_string, id),
+    static_cast<DynamicData *>(data_impl->handle)->set_string_value(
+      tmp_string, fastrtps__size_t_to_uint32_t(id)),
     "Could not set bounded `string` value (of type `char *`)"
   );
 }
@@ -707,7 +722,7 @@ fastrtps__dynamic_data_set_bounded_wstring_value(
   const std::u16string tmp_u16string(value, std::min(value_length, wstring_bound));
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicData *>(data_impl->handle)->set_wstring_value(
-      fastrtps__u16string_to_wstring(tmp_u16string), id),
+      fastrtps__u16string_to_wstring(tmp_u16string), fastrtps__size_t_to_uint32_t(id)),
     "Could not set bounded `wstring` value (of type `char16_t *`)"
   );
 }
@@ -929,7 +944,8 @@ fastrtps__dynamic_data_get_complex_value(
   auto tmp_data = static_cast<DynamicData *>((*value)->handle);
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
-    static_cast<const DynamicData *>(data_impl->handle)->get_complex_value(&tmp_data, id),
+    static_cast<const DynamicData *>(data_impl->handle)->get_complex_value(
+      &tmp_data, fastrtps__size_t_to_uint32_t(id)),
     "Could not get complex value"
   );
 }
@@ -945,7 +961,7 @@ fastrtps__dynamic_data_set_complex_value(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<DynamicData *>(data_impl->handle)->set_complex_value(
-      static_cast<DynamicData *>(value->handle), id),
+      static_cast<DynamicData *>(value->handle), fastrtps__size_t_to_uint32_t(id)),
     "Could not set complex value"
   );
 }

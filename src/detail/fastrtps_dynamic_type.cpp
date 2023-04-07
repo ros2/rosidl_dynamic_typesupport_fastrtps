@@ -19,6 +19,8 @@
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 #include <fastrtps/types/TypeDescriptor.h>
 
+#include <rcutils/strdup.h>
+
 #include <rosidl_runtime_c/type_description/field__functions.h>
 #include <rosidl_runtime_c/type_description/field__struct.h>
 #include <rosidl_runtime_c/type_description/field_type__functions.h>
@@ -244,7 +246,7 @@ fastrtps__dynamic_type_get_name(
 
   // Undo the mangling
   std::string tmp_name = fastrtps__replace_string(type->get_name(), "::", "/");
-  *name = strdup(tmp_name.c_str());
+  *name = rcutils_strdup(tmp_name.c_str(), rcutils_get_default_allocator());
   *name_length = tmp_name.size();
   return RCUTILS_RET_OK;
 }
@@ -262,7 +264,7 @@ fastrtps__dynamic_type_builder_get_name(
   // Undo the mangling
   std::string tmp_name = fastrtps__replace_string(
     static_cast<const DynamicTypeBuilder *>(type_builder_impl->handle)->get_name(), "::", "/");
-  *name = strdup(tmp_name.c_str());
+  *name = rcutils_strdup(tmp_name.c_str(), rcutils_get_default_allocator());
   *name_length = tmp_name.size();
   return RCUTILS_RET_OK;
 }
