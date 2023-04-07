@@ -648,12 +648,6 @@ rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface()
       const rosidl_dynamic_typesupport_dynamic_data_impl_t *))
     fastrtps__dynamic_data_return_loaned_value;
 
-  serialization_support_interface->dynamic_data_print =
-    (rcutils_ret_t (*)(
-      rosidl_dynamic_typesupport_serialization_support_impl_t *,
-      const rosidl_dynamic_typesupport_dynamic_data_impl_t *))
-    fastrtps__dynamic_data_print;
-
   serialization_support_interface->dynamic_data_get_name =
     (rcutils_ret_t (*)(
       rosidl_dynamic_typesupport_serialization_support_impl_t *,

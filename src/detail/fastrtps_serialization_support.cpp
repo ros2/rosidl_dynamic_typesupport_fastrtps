@@ -26,7 +26,7 @@ fastrtps__serialization_support_impl_destroy(
 {
   auto fastrtps_serialization_support_handle =
     static_cast<fastrtps__serialization_support_impl_handle_t *>(
-      serialization_support_impl->handle);
+    serialization_support_impl->handle);
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     fastrtps_serialization_support_handle->type_factory_->delete_instance(),

@@ -35,7 +35,6 @@
 #include <string>
 #include <utility>
 
-#include <fastrtps/types/DynamicDataHelper.hpp>
 #include "macros.hpp"
 #include "fastrtps_serialization_support.hpp"
 #include "utils.hpp"
@@ -43,7 +42,6 @@
 
 using eprosima::fastrtps::types::DynamicData;
 using eprosima::fastrtps::types::DynamicData_ptr;
-using eprosima::fastrtps::types::DynamicDataHelper;
 
 using eprosima::fastrtps::types::DynamicTypeBuilder;
 using eprosima::fastrtps::types::DynamicTypeBuilder_ptr;
@@ -199,17 +197,6 @@ fastrtps__dynamic_data_return_loaned_value(
     "Could not return loaned value"
   );
   delete inner_data_impl;
-  return RCUTILS_RET_OK;
-}
-
-
-rcutils_ret_t
-fastrtps__dynamic_data_print(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
-{
-  (void) serialization_support_impl;
-  DynamicDataHelper::print(static_cast<const DynamicData *>(data_impl->handle));
   return RCUTILS_RET_OK;
 }
 

@@ -21,7 +21,6 @@
 #include <string>
 
 
-
 /// Convert size_t to uint32_t, with limit checking
 /// `in` must be smaller than std::numeric_limits<uint32_t>::max()
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
