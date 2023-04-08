@@ -16,6 +16,7 @@
 
 #include <fastrtps/types/TypesBase.h>
 
+#include <cstdlib>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -27,6 +28,7 @@ fastrtps__size_t_to_uint32_t(size_t in)
 {
   if (in > std::numeric_limits<uint32_t>::max()) {
     std::cerr << "Passed size_t will overflow when narrowed to uint32_t!" << std::endl;
+    std::abort();
   }
   return static_cast<uint32_t>(in);
 }

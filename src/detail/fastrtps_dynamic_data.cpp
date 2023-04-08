@@ -318,7 +318,8 @@ fastrtps__dynamic_data_serialize(
   }
   buffer->buffer_capacity = data_length;
 
-  auto payload = std::make_shared<eprosima::fastrtps::rtps::SerializedPayload_t>(data_length);
+  auto payload = std::make_shared<eprosima::fastrtps::rtps::SerializedPayload_t>(
+    fastrtps__size_t_to_uint32_t(data_length));
   *success = m_type->serialize(data_impl->handle, payload.get());  // Serialize into payload
 
   if (*success) {
@@ -348,7 +349,7 @@ fastrtps__dynamic_data_deserialize(
 {
   (void) serialization_support_impl;
   auto payload = std::make_shared<eprosima::fastrtps::rtps::SerializedPayload_t>(
-    buffer->buffer_length);
+    fastrtps__size_t_to_uint32_t(buffer->buffer_length));
 
   // NOTE(methylDragon): Deserialize should copy at this point, so this copy is not needed, I think
   // memcpy(payload->data, buffer->buffer, buffer->buffer_length);
