@@ -20,6 +20,7 @@
 
 #include <rcutils/types/rcutils_ret.h>
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
+#include <rosidl_dynamic_typesupport/api/serialization_support.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 
 
@@ -32,12 +33,12 @@ typedef struct fastrtps__serialization_support_impl_handle_s
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__serialization_support_impl_destroy(
+fastrtps__serialization_support_impl_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__serialization_support_interface_destroy(
+fastrtps__serialization_support_interface_fini(
   rosidl_dynamic_typesupport_serialization_support_interface_t * serialization_support_interface);
 
 #endif  // DETAIL__FASTRTPS_SERIALIZATION_SUPPORT_HPP_

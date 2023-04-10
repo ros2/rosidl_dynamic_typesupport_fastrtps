@@ -13,7 +13,9 @@
 // limitations under the License.
 
 #include <fastrtps/types/TypesBase.h>
+#include <rcutils/allocator.h>
 #include <rcutils/types/rcutils_ret.h>
+#include <rosidl_dynamic_typesupport/api/serialization_support.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 
 #include "fastrtps_serialization_support.hpp"
@@ -21,9 +23,11 @@
 
 
 rcutils_ret_t
-fastrtps__serialization_support_impl_destroy(
+fastrtps__serialization_support_impl_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl)
 {
+  rcutils_allocator_t allocator = serialization_support_impl->allocator;
+
   auto fastrtps_serialization_support_handle =
     static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
@@ -36,17 +40,15 @@ fastrtps__serialization_support_impl_destroy(
     fastrtps_serialization_support_handle->data_factory_->delete_instance(),
     "Could not delete dynamic data factory when finalizing serialization support");
 
-  delete static_cast<fastrtps__serialization_support_impl_handle_t *>(
-    serialization_support_impl->handle);
-  delete serialization_support_impl;
+  allocator.deallocate(serialization_support_impl->handle, allocator.state);
   return RCUTILS_RET_OK;
 }
 
 
 rcutils_ret_t
-fastrtps__serialization_support_interface_destroy(
+fastrtps__serialization_support_interface_fini(
   rosidl_dynamic_typesupport_serialization_support_interface_t * serialization_support_interface)
 {
-  delete serialization_support_interface;
+  static_cast<void>(serialization_support_interface);
   return RCUTILS_RET_OK;
 }
