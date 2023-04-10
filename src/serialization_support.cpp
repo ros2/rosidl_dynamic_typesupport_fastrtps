@@ -101,23 +101,23 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
 
 
   // DYNAMIC TYPE CONSTRUCTION
-  serialization_support_interface->dynamic_type_builder_create =
-    fastrtps__dynamic_type_builder_create;
+  serialization_support_interface->dynamic_type_builder_init =
+    fastrtps__dynamic_type_builder_init;
 
   serialization_support_interface->dynamic_type_builder_clone =
     fastrtps__dynamic_type_builder_clone;
 
-  serialization_support_interface->dynamic_type_builder_destroy =
-    fastrtps__dynamic_type_builder_destroy;
+  serialization_support_interface->dynamic_type_builder_fini =
+    fastrtps__dynamic_type_builder_fini;
 
-  serialization_support_interface->dynamic_type_create_from_dynamic_type_builder =
-    fastrtps__dynamic_type_create_from_dynamic_type_builder;
+  serialization_support_interface->dynamic_type_init_from_dynamic_type_builder =
+    fastrtps__dynamic_type_init_from_dynamic_type_builder;
 
   serialization_support_interface->dynamic_type_clone =
     fastrtps__dynamic_type_clone;
 
-  serialization_support_interface->dynamic_type_destroy =
-    fastrtps__dynamic_type_destroy;
+  serialization_support_interface->dynamic_type_fini =
+    fastrtps__dynamic_type_fini;
 
   serialization_support_interface->dynamic_type_get_name =
     fastrtps__dynamic_type_get_name;
@@ -471,17 +471,17 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
 
 
   // DYNAMIC DATA CONSTRUCTION
-  serialization_support_interface->dynamic_data_create_from_dynamic_type_builder =
-    fastrtps__dynamic_data_create_from_dynamic_type_builder;
+  serialization_support_interface->dynamic_data_init_from_dynamic_type_builder =
+    fastrtps__dynamic_data_init_from_dynamic_type_builder;
 
-  serialization_support_interface->dynamic_data_create_from_dynamic_type =
-    fastrtps__dynamic_data_create_from_dynamic_type;
+  serialization_support_interface->dynamic_data_init_from_dynamic_type =
+    fastrtps__dynamic_data_init_from_dynamic_type;
 
   serialization_support_interface->dynamic_data_clone =
     fastrtps__dynamic_data_clone;
 
-  serialization_support_interface->dynamic_data_destroy =
-    fastrtps__dynamic_data_destroy;
+  serialization_support_interface->dynamic_data_fini =
+    fastrtps__dynamic_data_fini;
 
 
   // DYNAMIC DATA SERIALIZATION

@@ -21,7 +21,6 @@
 #include "fastrtps_serialization_support.hpp"
 #include "macros.hpp"
 
-
 rcutils_ret_t
 fastrtps__serialization_support_impl_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl)
@@ -43,7 +42,6 @@ fastrtps__serialization_support_impl_fini(
   allocator.deallocate(serialization_support_impl->handle, allocator.state);
   return RCUTILS_RET_OK;
 }
-
 
 rcutils_ret_t
 fastrtps__serialization_support_interface_fini(

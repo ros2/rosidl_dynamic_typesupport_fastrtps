@@ -17,6 +17,7 @@
 
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 
+#include <rcutils/allocator.h>
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/types/uint8_array.h>
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
@@ -94,7 +95,8 @@ fastrtps__dynamic_data_loan_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** loaned_data_impl);  // OUT
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * loaned_data_impl);  // OUT
 
 // The passed 'inner_data_impl' arg to return must be the immediate child of the passed 'data_impl'
 // arg
@@ -117,28 +119,31 @@ fastrtps__dynamic_data_get_name(
 // DYNAMIC DATA CONSTRUCTION =======================================================================
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_data_create_from_dynamic_type_builder(
+fastrtps__dynamic_data_init_from_dynamic_type_builder(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl);  // OUT
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_data_create_from_dynamic_type(
+fastrtps__dynamic_data_init_from_dynamic_type(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl);  // OUT
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
 fastrtps__dynamic_data_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * other_data_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl);  // OUT
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_data_destroy(
+fastrtps__dynamic_data_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl);
 
@@ -149,16 +154,14 @@ rcutils_ret_t
 fastrtps__dynamic_data_serialize(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rcutils_uint8_array_t * buffer,  // OUT
-  bool * success);  // OUT
+  rcutils_uint8_array_t * buffer);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
 fastrtps__dynamic_data_deserialize(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rcutils_uint8_array_t * buffer,  // OUT
-  bool * success);  // OUT
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,  // OUT
+  rcutils_uint8_array_t * buffer);
 
 
 // DYNAMIC DATA PRIMITIVE MEMBERS GETTERS ==========================================================
@@ -676,7 +679,8 @@ fastrtps__dynamic_data_get_complex_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** value);  // OUT
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * value);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t

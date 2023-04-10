@@ -21,6 +21,7 @@
 
 #include <string.h>
 
+#include <rcutils/allocator.h>
 #include <rcutils/strdup.h>
 #include <rcutils/types/rcutils_ret.h>
 #include <rcutils/types/uint8_array.h>
@@ -167,9 +168,12 @@ fastrtps__dynamic_data_loan_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** loaned_data_impl)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * loaned_data_impl)
 {
   (void) serialization_support_impl;
+  (void) allocator;
+
   DynamicData * loaned_data_impl_handle =
     static_cast<DynamicData *>(data_impl->handle)->loan_value(
     fastrtps__size_t_to_uint32_t(id));
@@ -178,8 +182,7 @@ fastrtps__dynamic_data_loan_value(
     return RCUTILS_RET_ERROR;
   }
 
-  *loaned_data_impl = new rosidl_dynamic_typesupport_dynamic_data_impl_t{
-    std::move(loaned_data_impl_handle)};
+  loaned_data_impl->handle = std::move(loaned_data_impl_handle);
   return RCUTILS_RET_OK;
 }
 
@@ -196,7 +199,6 @@ fastrtps__dynamic_data_return_loaned_value(
     ->return_loaned_value(static_cast<const DynamicData *>(inner_data_impl->handle)),
     "Could not return loaned value"
   );
-  delete inner_data_impl;
   return RCUTILS_RET_OK;
 }
 
@@ -218,29 +220,35 @@ fastrtps__dynamic_data_get_name(
 
 // DYNAMIC DATA CONSTRUCTION =======================================================================
 rcutils_ret_t
-fastrtps__dynamic_data_create_from_dynamic_type_builder(
+fastrtps__dynamic_data_init_from_dynamic_type_builder(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
+  (void) allocator;
+
   auto out = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle)->data_factory_->create_data(
     static_cast<DynamicTypeBuilder *>(type_builder_impl->handle));
   if (!out) {
-    RCUTILS_SET_ERROR_MSG("Could not create dynamic data from dynamic type builder");
+    RCUTILS_SET_ERROR_MSG("Could not init dynamic data from dynamic type builder");
     return RCUTILS_RET_BAD_ALLOC;
   }
 
-  *data_impl = new rosidl_dynamic_typesupport_dynamic_data_impl_t{out};
+  data_impl->handle = std::move(out);
   return RCUTILS_RET_OK;
 }
 
 rcutils_ret_t
-fastrtps__dynamic_data_create_from_dynamic_type(
+fastrtps__dynamic_data_init_from_dynamic_type(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
+  (void) allocator;
+
   // NOTE(methylDragon): All this casting is unfortunately necessary...
   //
   //                     create_data only takes DynamicType_ptr (aka shared_ptr)
@@ -251,11 +259,11 @@ fastrtps__dynamic_data_create_from_dynamic_type(
     eprosima::fastrtps::types::DynamicType_ptr(
       *static_cast<eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle)));
   if (!out) {
-    RCUTILS_SET_ERROR_MSG("Could not create dynamic data from dynamic type");
+    RCUTILS_SET_ERROR_MSG("Could not init dynamic data from dynamic type");
     return RCUTILS_RET_BAD_ALLOC;
   }
 
-  *data_impl = new rosidl_dynamic_typesupport_dynamic_data_impl_t{out};
+  data_impl->handle = std::move(out);
   return RCUTILS_RET_OK;
 }
 
@@ -263,8 +271,13 @@ rcutils_ret_t
 fastrtps__dynamic_data_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * other_data_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** data_impl)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
+  (void) allocator;
+
+  data_impl->allocator = *allocator;
+
   DynamicData * data_impl_handle = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle)->data_factory_->create_copy(
     static_cast<const DynamicData *>(other_data_impl->handle));
@@ -273,24 +286,21 @@ fastrtps__dynamic_data_clone(
     return RCUTILS_RET_ERROR;
   }
 
-  *data_impl = new rosidl_dynamic_typesupport_dynamic_data_impl_t{
-    std::move(data_impl_handle)
-  };
+  data_impl->handle = std::move(data_impl_handle);
   return RCUTILS_RET_OK;
 }
 
 
 rcutils_ret_t
-fastrtps__dynamic_data_destroy(
+fastrtps__dynamic_data_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     static_cast<fastrtps__serialization_support_impl_handle_t *>(serialization_support_impl->handle)
     ->data_factory_->delete_data(static_cast<DynamicData *>(data_impl->handle)),
-    "Could not delete data"
+    "Could not fini data"
   );
-  delete data_impl;
   return RCUTILS_RET_OK;
 }
 
@@ -302,8 +312,7 @@ rcutils_ret_t
 fastrtps__dynamic_data_serialize(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rcutils_uint8_array_t * buffer,
-  bool * success)
+  rcutils_uint8_array_t * buffer)
 {
   (void) serialization_support_impl;
   auto m_type = std::make_shared<eprosima::fastrtps::types::DynamicPubSubType>();
@@ -320,9 +329,9 @@ fastrtps__dynamic_data_serialize(
 
   auto payload = std::make_shared<eprosima::fastrtps::rtps::SerializedPayload_t>(
     fastrtps__size_t_to_uint32_t(data_length));
-  *success = m_type->serialize(data_impl->handle, payload.get());  // Serialize into payload
+  bool success = m_type->serialize(data_impl->handle, payload.get());  // Serialize into payload
 
-  if (*success) {
+  if (success) {
     buffer->buffer_length = payload->length;
 
     // Pass ownership of serialized buffer to buffer argument
@@ -344,8 +353,7 @@ rcutils_ret_t
 fastrtps__dynamic_data_deserialize(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rcutils_uint8_array_t * buffer,
-  bool * success)
+  rcutils_uint8_array_t * buffer)
 {
   (void) serialization_support_impl;
   auto payload = std::make_shared<eprosima::fastrtps::rtps::SerializedPayload_t>(
@@ -358,10 +366,10 @@ fastrtps__dynamic_data_deserialize(
   payload->length = fastrtps__size_t_to_uint32_t(buffer->buffer_length);
 
   auto m_type = std::make_shared<eprosima::fastrtps::types::DynamicPubSubType>();
-  *success = m_type->deserialize(payload.get(), data_impl->handle);
+  bool success = m_type->deserialize(payload.get(), data_impl->handle);
 
   // Deserializes payload into dynamic data. This copies!
-  if (*success) {
+  if (success) {
     payload->data = nullptr;  // Data gets freed on buffer fini outside
     return RCUTILS_RET_OK;
   } else {
@@ -444,7 +452,7 @@ fastrtps__dynamic_data_get_string_value(
   );
 
   *value_length = tmp_string.size();
-  char * tmp_out = new char[*value_length + 1];
+  char * tmp_out = new char[*value_length + 1];  // TODO(methylDragon): Use alloc here
   memcpy(tmp_out, tmp_string.c_str(), *value_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
@@ -468,7 +476,7 @@ fastrtps__dynamic_data_get_wstring_value(
   );
 
   *value_length = tmp_wstring.size();
-  char16_t * tmp_out = new char16_t[*value_length + 1];
+  char16_t * tmp_out = new char16_t[*value_length + 1];  // TODO(methylDragon): Use alloc here
   fastrtps__ucsncpy(tmp_out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
@@ -495,7 +503,7 @@ fastrtps__dynamic_data_get_fixed_string_value(
 
   size_t copy_length = std::min(tmp_string.size(), string_length);
   *value_length = string_length;
-  char * tmp_out = new char[*value_length + 1]();
+  char * tmp_out = new char[*value_length + 1]();  // TODO(methylDragon): Use alloc here
   memcpy(tmp_out, tmp_string.c_str(), copy_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
@@ -522,7 +530,7 @@ fastrtps__dynamic_data_get_fixed_wstring_value(
 
   size_t copy_length = std::min(tmp_wstring.size(), wstring_length);
   *value_length = wstring_length;
-  char16_t * tmp_out = new char16_t[*value_length + 1];
+  char16_t * tmp_out = new char16_t[*value_length + 1];  // TODO(methylDragon): Use alloc here
   fastrtps__ucsncpy(tmp_out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), copy_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
@@ -547,7 +555,7 @@ fastrtps__dynamic_data_get_bounded_string_value(
   );
 
   *value_length = std::min(tmp_string.size(), string_bound);
-  char * tmp_out = new char[*value_length + 1];
+  char * tmp_out = new char[*value_length + 1];  // TODO(methylDragon): Use alloc here
   memcpy(tmp_out, tmp_string.c_str(), *value_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
@@ -572,7 +580,7 @@ fastrtps__dynamic_data_get_bounded_wstring_value(
   );
 
   *value_length = std::min(tmp_wstring.size(), wstring_bound);
-  char16_t * tmp_out = new char16_t[*value_length + 1];
+  char16_t * tmp_out = new char16_t[*value_length + 1];  // TODO(methylDragon): Use alloc here
   fastrtps__ucsncpy(tmp_out, fastrtps__wstring_to_u16string(tmp_wstring).c_str(), *value_length);
   tmp_out[*value_length] = '\0';
   *value = tmp_out;
@@ -926,10 +934,13 @@ fastrtps__dynamic_data_get_complex_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t ** value)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_data_impl_t * value)
 {
   (void) serialization_support_impl;
-  auto tmp_data = static_cast<DynamicData *>((*value)->handle);
+  (void) allocator;
+
+  auto tmp_data = static_cast<DynamicData *>(value->handle);
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(
     static_cast<const DynamicData *>(data_impl->handle)->get_complex_value(
