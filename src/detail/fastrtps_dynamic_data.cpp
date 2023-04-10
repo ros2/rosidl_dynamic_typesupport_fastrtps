@@ -274,10 +274,7 @@ fastrtps__dynamic_data_clone(
   rcutils_allocator_t * allocator,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl)
 {
-  (void) allocator;
-
   data_impl->allocator = *allocator;
-
   DynamicData * data_impl_handle = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle)->data_factory_->create_copy(
     static_cast<const DynamicData *>(other_data_impl->handle));

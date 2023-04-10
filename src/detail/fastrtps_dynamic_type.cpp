@@ -128,8 +128,7 @@ fastrtps__dynamic_type_builder_clone(
   rcutils_allocator_t * allocator,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)
 {
-  (void) allocator;
-
+  type_builder_impl->allocator = *allocator;
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
   DynamicTypeBuilder * type_builder_handle = fastrtps_impl->type_factory_->create_builder_copy(
@@ -193,8 +192,7 @@ fastrtps__dynamic_type_clone(
   rcutils_allocator_t * allocator,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
 {
-  (void) allocator;
-
+  type_impl->allocator = *allocator;
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
 

@@ -40,6 +40,10 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_impl(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl)
 {
   RCUTILS_CHECK_ARGUMENT_FOR_NULL(allocator, RCUTILS_RET_INVALID_ARGUMENT);
+  if (!rcutils_allocator_is_valid(allocator)) {
+    RCUTILS_SET_ERROR_MSG("allocator is invalid");
+    return RCUTILS_RET_INVALID_ARGUMENT;
+  }
   RCUTILS_CHECK_ARGUMENT_FOR_NULL(serialization_support_impl, RCUTILS_RET_INVALID_ARGUMENT);
 
   auto serialization_support_impl_handle =
