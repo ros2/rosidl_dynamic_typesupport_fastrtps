@@ -24,18 +24,20 @@ extern "C" {
 
 #include <rosidl_dynamic_typesupport/api/serialization_support_interface.h>
 
-
 /// This is the main file to include
 
 // CORE ============================================================================================
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rosidl_dynamic_typesupport_serialization_support_impl_t *
-rosidl_dynamic_typesupport_fastrtps_create_serialization_support_impl();
+rcutils_ret_t
+rosidl_dynamic_typesupport_fastrtps_init_serialization_support_impl(
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl);
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rosidl_dynamic_typesupport_serialization_support_interface_t *
-rosidl_dynamic_typesupport_fastrtps_create_serialization_support_interface();
-
+rcutils_ret_t
+rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_serialization_support_interface_t * serialization_support_interface);
 
 #ifdef __cplusplus
 }

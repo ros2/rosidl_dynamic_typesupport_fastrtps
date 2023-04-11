@@ -19,6 +19,7 @@
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 #include <fastrtps/types/TypeDescriptor.h>
 
+#include <rcutils/allocator.h>
 #include <rcutils/strdup.h>
 
 #include <rosidl_runtime_c/type_description/field__functions.h>
@@ -91,11 +92,14 @@ fastrtps__dynamic_type_get_member_count(
 
 // DYNAMIC TYPE CONSTRUCTION =======================================================================
 rcutils_ret_t
-fastrtps__dynamic_type_builder_create(
+fastrtps__dynamic_type_builder_init(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const char * name, size_t name_length,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t ** type_builder_impl)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)
 {
+  (void) allocator;
+
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
   DynamicTypeBuilder * type_builder_handle = fastrtps_impl->type_factory_->create_struct_builder();
@@ -111,8 +115,8 @@ fastrtps__dynamic_type_builder_create(
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     type_builder_handle->set_name(name_string), "Could not set type builder name");
-  *type_builder_impl = new rosidl_dynamic_typesupport_dynamic_type_builder_impl_t{
-    std::move(type_builder_handle)};
+
+  type_builder_impl->handle = std::move(type_builder_handle);
   return RCUTILS_RET_OK;
 }
 
@@ -121,8 +125,10 @@ rcutils_ret_t
 fastrtps__dynamic_type_builder_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * other,
-  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t ** type_builder_impl)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)
 {
+  type_builder_impl->allocator = *allocator;
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
   DynamicTypeBuilder * type_builder_handle = fastrtps_impl->type_factory_->create_builder_copy(
@@ -132,14 +138,13 @@ fastrtps__dynamic_type_builder_clone(
     return RCUTILS_RET_ERROR;
   }
 
-  *type_builder_impl = new rosidl_dynamic_typesupport_dynamic_type_builder_impl_t{
-    std::move(type_builder_handle)};
+  type_builder_impl->handle = std::move(type_builder_handle);
   return RCUTILS_RET_OK;
 }
 
 
 rcutils_ret_t
-fastrtps__dynamic_type_builder_destroy(
+fastrtps__dynamic_type_builder_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl)
 {
@@ -148,35 +153,34 @@ fastrtps__dynamic_type_builder_destroy(
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
     fastrtps_impl->type_factory_->delete_builder(
       static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)),
-    "Could not delete type builder"
+    "Could not fini type builder"
   );
-  delete type_builder_impl;
   return RCUTILS_RET_OK;
 }
 
 
 rcutils_ret_t
-fastrtps__dynamic_type_create_from_dynamic_type_builder(
+fastrtps__dynamic_type_init_from_dynamic_type_builder(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_builder_impl_t * type_builder_impl,
-  rosidl_dynamic_typesupport_dynamic_type_impl_t ** type_impl)
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
 {
   (void) serialization_support_impl;
+  (void) allocator;
+
+  eprosima::fastrtps::types::DynamicType_ptr type_impl_out_handle =
+    static_cast<DynamicTypeBuilder *>(type_builder_impl->handle)->build();
+  if (!type_impl_out_handle) {
+    RCUTILS_SET_ERROR_MSG("Could not create dynamic type from dynamic type builder");
+    return RCUTILS_RET_BAD_ALLOC;
+  }
 
   // Disgusting, but unavoidable... (we can't easily transfer ownership)
   //
   // We're forcing the managed pointer to persist outside of function scope by moving ownership
   // to a new, heap-allocated DynamicType_ptr (which is a shared_ptr)
-  eprosima::fastrtps::types::DynamicType_ptr out = static_cast<DynamicTypeBuilder *>(
-    type_builder_impl->handle)->build();
-  if (!out) {
-    RCUTILS_SET_ERROR_MSG("Could not create dynamic type from dynamic type builder");
-    return RCUTILS_RET_BAD_ALLOC;
-  }
-
-  *type_impl = new rosidl_dynamic_typesupport_dynamic_type_impl_t{
-    static_cast<void *>(new DynamicType_ptr(std::move(out)))
-  };
+  type_impl->handle = static_cast<void *>(new DynamicType_ptr(std::move(type_impl_out_handle)));
   return RCUTILS_RET_OK;
 }
 
@@ -184,14 +188,16 @@ fastrtps__dynamic_type_create_from_dynamic_type_builder(
 rcutils_ret_t
 fastrtps__dynamic_type_clone(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl,
-  rosidl_dynamic_typesupport_dynamic_type_impl_t ** type_impl_out)
+  const rosidl_dynamic_typesupport_dynamic_type_impl_t * other,
+  rcutils_allocator_t * allocator,
+  rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
 {
+  type_impl->allocator = *allocator;
   auto fastrtps_impl = static_cast<fastrtps__serialization_support_impl_handle_t *>(
     serialization_support_impl->handle);
 
   auto type_impl_handle = eprosima::fastrtps::types::DynamicType_ptr(
-    *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
+    *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(other->handle));
   if (!type_impl_handle) {
     RCUTILS_SET_ERROR_MSG("Could not get handle to type impl");
     return RCUTILS_RET_INVALID_ARGUMENT;
@@ -208,15 +214,14 @@ fastrtps__dynamic_type_clone(
   //
   // We're forcing the managed pointer to persist outside of function scope by moving ownership
   // to a new, heap-allocated DynamicType_ptr (which is a shared_ptr)
-  *type_impl_out = new rosidl_dynamic_typesupport_dynamic_type_impl_t{
-    static_cast<void *>(new DynamicType_ptr(std::move(type_impl_out_handle)))
-  };
+  type_impl->handle = static_cast<void *>(
+    new DynamicType_ptr(std::move(type_impl_out_handle)));
   return RCUTILS_RET_OK;
 }
 
 
 rcutils_ret_t
-fastrtps__dynamic_type_destroy(
+fastrtps__dynamic_type_fini(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_type_impl_t * type_impl)
 {
@@ -226,9 +231,8 @@ fastrtps__dynamic_type_destroy(
     *static_cast<const eprosima::fastrtps::types::DynamicType_ptr *>(type_impl->handle));
 
   FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(
-    fastrtps_impl->type_factory_->delete_type(type.get()), "Could not delete type"
+    fastrtps_impl->type_factory_->delete_type(type.get()), "Could not fini type"
   );
-  delete type_impl;
   return RCUTILS_RET_OK;
 }
 
@@ -246,7 +250,7 @@ fastrtps__dynamic_type_get_name(
 
   // Undo the mangling
   std::string tmp_name = fastrtps__replace_string(type->get_name(), "::", "/");
-  *name = rcutils_strdup(tmp_name.c_str(), rcutils_get_default_allocator());
+  *name = rcutils_strdup(tmp_name.c_str(), type_impl->allocator);
   *name_length = tmp_name.size();
   return RCUTILS_RET_OK;
 }
@@ -264,7 +268,7 @@ fastrtps__dynamic_type_builder_get_name(
   // Undo the mangling
   std::string tmp_name = fastrtps__replace_string(
     static_cast<const DynamicTypeBuilder *>(type_builder_impl->handle)->get_name(), "::", "/");
-  *name = rcutils_strdup(tmp_name.c_str(), rcutils_get_default_allocator());
+  *name = rcutils_strdup(tmp_name.c_str(), type_builder_impl->allocator);
   *name_length = tmp_name.size();
   return RCUTILS_RET_OK;
 }
