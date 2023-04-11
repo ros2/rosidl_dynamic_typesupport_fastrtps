@@ -2,8 +2,8 @@
 Changelog for package rosidl_dynamic_typesupport_fastrtps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.2 (2023-04-11)
+------------------
 * Remove more unnecessary semicolons (`#4 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/4>`__)
 * Dynamic Subscription (BONUS: Allocators): rosidl_dynamic_typesupport_fastrtps (`#3 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/3>`__)
 * Remove unnecessary semicolons. (`#2 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/2>`__)

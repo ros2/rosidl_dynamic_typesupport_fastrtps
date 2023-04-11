@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>rosidl_dynamic_typesupport_fastrtps</name>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <description>FastDDS serialization support implementation for use with C/C++.</description>
   <maintainer email="brandon@openrobotics.org">Brandon Ong</maintainer>
 
