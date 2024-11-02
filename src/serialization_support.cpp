@@ -152,9 +152,6 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
   serialization_support_interface->dynamic_type_builder_add_float64_member =
     fastrtps__dynamic_type_builder_add_float64_member;
 
-  serialization_support_interface->dynamic_type_builder_add_float128_member =
-    fastrtps__dynamic_type_builder_add_float128_member;
-
   serialization_support_interface->dynamic_type_builder_add_int8_member =
     fastrtps__dynamic_type_builder_add_int8_member;
 
@@ -221,9 +218,6 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
   serialization_support_interface->dynamic_type_builder_add_float64_array_member =
     fastrtps__dynamic_type_builder_add_float64_array_member;
 
-  serialization_support_interface->dynamic_type_builder_add_float128_array_member =
-    fastrtps__dynamic_type_builder_add_float128_array_member;
-
   serialization_support_interface->dynamic_type_builder_add_int8_array_member =
     fastrtps__dynamic_type_builder_add_int8_array_member;
 
@@ -286,9 +280,6 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
 
   serialization_support_interface->dynamic_type_builder_add_float64_unbounded_sequence_member =
     fastrtps__dynamic_type_builder_add_float64_unbounded_sequence_member;
-
-  serialization_support_interface->dynamic_type_builder_add_float128_unbounded_sequence_member =
-    fastrtps__dynamic_type_builder_add_float128_unbounded_sequence_member;
 
   serialization_support_interface->dynamic_type_builder_add_int8_unbounded_sequence_member =
     fastrtps__dynamic_type_builder_add_int8_unbounded_sequence_member;
@@ -356,9 +347,6 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
 
   serialization_support_interface->dynamic_type_builder_add_float64_bounded_sequence_member =
     fastrtps__dynamic_type_builder_add_float64_bounded_sequence_member;
-
-  serialization_support_interface->dynamic_type_builder_add_float128_bounded_sequence_member =
-    fastrtps__dynamic_type_builder_add_float128_bounded_sequence_member;
 
   serialization_support_interface->dynamic_type_builder_add_int8_bounded_sequence_member =
     fastrtps__dynamic_type_builder_add_int8_bounded_sequence_member;
@@ -515,9 +503,6 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
   serialization_support_interface->dynamic_data_get_float64_value =
     fastrtps__dynamic_data_get_float64_value;
 
-  serialization_support_interface->dynamic_data_get_float128_value =
-    fastrtps__dynamic_data_get_float128_value;
-
   serialization_support_interface->dynamic_data_get_int8_value =
     fastrtps__dynamic_data_get_int8_value;
 
@@ -580,9 +565,6 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
 
   serialization_support_interface->dynamic_data_set_float64_value =
     fastrtps__dynamic_data_set_float64_value;
-
-  serialization_support_interface->dynamic_data_set_float128_value =
-    fastrtps__dynamic_data_set_float128_value;
 
   serialization_support_interface->dynamic_data_set_int8_value =
     fastrtps__dynamic_data_set_int8_value;
@@ -656,9 +638,6 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
 
   serialization_support_interface->dynamic_data_insert_float64_value =
     fastrtps__dynamic_data_insert_float64_value;
-
-  serialization_support_interface->dynamic_data_insert_float128_value =
-    fastrtps__dynamic_data_insert_float128_value;
 
   serialization_support_interface->dynamic_data_insert_int8_value =
     fastrtps__dynamic_data_insert_int8_value;

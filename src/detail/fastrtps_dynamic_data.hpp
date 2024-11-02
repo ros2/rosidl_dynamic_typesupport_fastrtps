@@ -215,14 +215,6 @@ fastrtps__dynamic_data_get_float64_value(
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_data_get_float128_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id,
-  long double * value);  // OUT  // NOLINT(runtime/int)
-
-ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rcutils_ret_t
 fastrtps__dynamic_data_get_int8_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -389,13 +381,6 @@ fastrtps__dynamic_data_set_float64_value(
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__dynamic_data_set_float128_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
-  rosidl_dynamic_typesupport_member_id_t id, long double value);
-
-ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rcutils_ret_t
 fastrtps__dynamic_data_set_int8_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
@@ -558,13 +543,6 @@ rcutils_ret_t
 fastrtps__dynamic_data_insert_float64_value(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, double value,
-  rosidl_dynamic_typesupport_member_id_t * out_id);  // OUT
-
-ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
-rcutils_ret_t
-fastrtps__dynamic_data_insert_float128_value(
-  rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
-  rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl, long double value,
   rosidl_dynamic_typesupport_member_id_t * out_id);  // OUT
 
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
