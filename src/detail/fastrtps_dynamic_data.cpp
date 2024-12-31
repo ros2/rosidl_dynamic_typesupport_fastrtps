@@ -924,7 +924,7 @@ fastrtps__dynamic_data_insert_bounded_wstring_value(
 
 // DYNAMIC DATA NESTED =============================================================================
 rcutils_ret_t
-fastrtps__dynamic_data_get_complex_value(
+fastrtps__dynamic_data_get_nested_data(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id,
@@ -945,7 +945,7 @@ fastrtps__dynamic_data_get_complex_value(
 
 
 rcutils_ret_t
-fastrtps__dynamic_data_set_complex_value(
+fastrtps__dynamic_data_set_nested_data(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_member_id_t id, rosidl_dynamic_typesupport_dynamic_data_impl_t * value)
@@ -961,7 +961,7 @@ fastrtps__dynamic_data_set_complex_value(
 
 
 rcutils_ret_t
-fastrtps__dynamic_data_insert_complex_value_copy(
+fastrtps__dynamic_data_insert_nested_data_copy(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   const rosidl_dynamic_typesupport_dynamic_data_impl_t * value,
@@ -981,7 +981,7 @@ fastrtps__dynamic_data_insert_complex_value_copy(
 
 
 rcutils_ret_t
-fastrtps__dynamic_data_insert_complex_value(
+fastrtps__dynamic_data_insert_nested_data(
   rosidl_dynamic_typesupport_serialization_support_impl_t * serialization_support_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * data_impl,
   rosidl_dynamic_typesupport_dynamic_data_impl_t * value,

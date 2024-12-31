@@ -684,17 +684,33 @@ rosidl_dynamic_typesupport_fastrtps_init_serialization_support_interface(
 
 
   // DYNAMIC TYPE NESTED
+  serialization_support_interface->dynamic_data_get_nested_data =
+    fastrtps__dynamic_data_get_nested_data;
+
+  serialization_support_interface->dynamic_data_set_nested_data =
+    fastrtps__dynamic_data_set_nested_data;
+
+  serialization_support_interface->dynamic_data_insert_nested_data_copy =
+    fastrtps__dynamic_data_insert_nested_data_copy;
+
+  serialization_support_interface->dynamic_data_insert_nested_data =
+    fastrtps__dynamic_data_insert_nested_data;
+
+  // Deprecated.
   serialization_support_interface->dynamic_data_get_complex_value =
-    fastrtps__dynamic_data_get_complex_value;
+    fastrtps__dynamic_data_get_nested_data;
 
+  // Deprecated.
   serialization_support_interface->dynamic_data_set_complex_value =
-    fastrtps__dynamic_data_set_complex_value;
+    fastrtps__dynamic_data_set_nested_data;
 
+  // Deprecated.
   serialization_support_interface->dynamic_data_insert_complex_value_copy =
-    fastrtps__dynamic_data_insert_complex_value_copy;
+    fastrtps__dynamic_data_insert_nested_data_copy;
 
+  // Deprecated.
   serialization_support_interface->dynamic_data_insert_complex_value =
-    fastrtps__dynamic_data_insert_complex_value;
+    fastrtps__dynamic_data_insert_nested_data;
 
   return RCUTILS_RET_OK;
 }  // NOLINT(readability/fn_size)
