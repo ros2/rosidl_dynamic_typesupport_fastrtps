@@ -18,7 +18,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif
+#endif // ifdef __cplusplus
 
 
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
@@ -31,12 +31,12 @@ extern "C"
   #else
     #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_EXPORT __declspec(dllexport)
     #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_IMPORT __declspec(dllimport)
-  #endif
+  #endif // ifdef __GNUC__
   #ifdef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_BUILDING_DLL
     #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_EXPORT
   #else
     #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_IMPORT
-  #endif
+  #endif // ifdef ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_BUILDING_DLL
   #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_LOCAL
 #else
   #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_EXPORT __attribute__ ((visibility("default")))
@@ -47,12 +47,12 @@ extern "C"
   #else
     #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
     #define ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_LOCAL
-  #endif
-#endif
+  #endif // if __GNUC__ >= 4
+#endif // if defined _WIN32 || defined __CYGWIN__
 
 
 #ifdef __cplusplus
 }
-#endif
+#endif // ifdef __cplusplus
 
 #endif  // ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS__VISIBILITY_CONTROL_H_

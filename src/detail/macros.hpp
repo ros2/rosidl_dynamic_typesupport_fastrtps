@@ -15,12 +15,11 @@
 #ifndef DETAIL__MACROS_HPP_
 #define DETAIL__MACROS_HPP_
 
-#include <fastrtps/types/TypesBase.h>
-#include <rcutils/types/rcutils_ret.h>
+#include <fastdds/dds/core/ReturnCode.hpp>
 #include <rcutils/error_handling.h>
+#include <rcutils/types/rcutils_ret.h>
 
 #include "utils.hpp"
-
 
 /// Check ReturnCode_t, and return its equivalent rcutils_ret_t if not ok, with an error message.
 /**
@@ -30,15 +29,16 @@
  * \param[in] statement_with_return_code The statement to test.
  * \param[in] msg The error message if the statement returns a non-ok return code.
  */
-#define FASTRTPS_CHECK_RET_FOR_NOT_OK_WITH_MSG(statement_with_return_code, msg) \
-  do { \
-    eprosima::fastrtps::types::ReturnCode_t macro_ret_ = statement_with_return_code; \
-    if (macro_ret_ != eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK) { \
+#define FASTDDS_CHECK_RET_FOR_NOT_OK_WITH_MSG(statement_with_return_code, msg) \
+  do \
+  { \
+    eprosima::fastdds::dds::ReturnCode_t macro_ret_ = statement_with_return_code; \
+    if (macro_ret_ != eprosima::fastdds::dds::RETCODE_OK) \
+    { \
       RCUTILS_SET_ERROR_MSG(msg); \
-      return fastrtps__convert_fastrtps_ret_to_rcl_ret(macro_ret_); \
+      return fastdds__convert_fastdds_ret_to_rcl_ret(macro_ret_); \
     } \
   } while (0)
-
 
 /// Return ReturnCode_t, converted to its equivalent rcutils_ret_t, setting error msg as needed.
 /**
@@ -46,22 +46,25 @@
  * \param[in] statement_with_return_code The statement to test.
  * \param[in] msg The error message if the statement returns a non-ok return code.
  */
-#define FASTRTPS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(statement_with_return_code, msg) \
-  do { \
-    eprosima::fastrtps::types::ReturnCode_t macro_ret_ = statement_with_return_code; \
-    if (macro_ret_ != eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK) { \
+#define FASTDDS_CHECK_RET_FOR_NOT_OK_AND_RETURN_WITH_MSG(statement_with_return_code, msg) \
+  do \
+  { \
+    eprosima::fastdds::dds::ReturnCode_t macro_ret_ = statement_with_return_code; \
+    if (macro_ret_ != eprosima::fastdds::dds::RETCODE_OK) \
+    { \
       RCUTILS_SET_ERROR_MSG(msg); \
-      return fastrtps__convert_fastrtps_ret_to_rcl_ret(macro_ret_); \
-    } else { \
+      return fastdds__convert_fastdds_ret_to_rcl_ret(macro_ret_); \
+    } \
+    else \
+    { \
       return RCUTILS_RET_OK; \
     } \
   } while (0)
 
+#define FASTDDS_STRINGIFY(x) FASTDDS_STRINGIFY2(x)
+#define FASTDDS_STRINGIFY2(x) #x
 
-#define FASTRTPS_STRINGIFY(x) FASTRTPS_STRINGIFY2(x)
-#define FASTRTPS_STRINGIFY2(x) #x
+#define FASTDDS_EXPAND(x) FASTDDS_EXPAND2(x)
+#define FASTDDS_EXPAND2(x) x
 
-#define FASTRTPS_EXPAND(x) FASTRTPS_EXPAND2(x)
-#define FASTRTPS_EXPAND2(x) x
-
-#endif  // DETAIL__MACROS_HPP_
+#endif // DETAIL__MACROS_HPP_

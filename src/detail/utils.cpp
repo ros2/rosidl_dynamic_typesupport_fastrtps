@@ -14,7 +14,7 @@
 
 #include "utils.hpp"
 
-#include <fastrtps/types/TypesBase.h>
+#include <fastdds/dds/core/ReturnCode.hpp>
 
 #include <cstdlib>
 #include <iostream>
@@ -24,7 +24,7 @@
 
 
 uint32_t
-fastrtps__size_t_to_uint32_t(size_t in)
+fastdds__size_t_to_uint32_t(size_t in)
 {
   if (in > std::numeric_limits<uint32_t>::max()) {
     std::cerr << "Passed size_t will overflow when narrowed to uint32_t!" << std::endl;
@@ -33,9 +33,8 @@ fastrtps__size_t_to_uint32_t(size_t in)
   return static_cast<uint32_t>(in);
 }
 
-
 char16_t *
-fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
+fastdds__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
 {
   if (src == NULL || dest == NULL) {
     return NULL;
@@ -50,9 +49,8 @@ fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n)
   return out;
 }
 
-
 std::wstring
-fastrtps__u16string_to_wstring(const std::u16string & u16str)
+fastdds__u16string_to_wstring(const std::u16string & u16str)
 {
   std::wstring wstr;
   wstr.resize(u16str.size());
@@ -62,9 +60,8 @@ fastrtps__u16string_to_wstring(const std::u16string & u16str)
   return wstr;
 }
 
-
 std::u16string
-fastrtps__wstring_to_u16string(const std::wstring & wstr)
+fastdds__wstring_to_u16string(const std::wstring & wstr)
 {
   std::u16string u16str;
   u16str.resize(wstr.size());
@@ -74,9 +71,8 @@ fastrtps__wstring_to_u16string(const std::wstring & wstr)
   return u16str;
 }
 
-
 std::string
-fastrtps__replace_string(std::string str, const std::string & from, const std::string & to)
+fastdds__replace_string(std::string str, const std::string & from, const std::string & to)
 {
   size_t pos = 0;
   while ((pos = str.find(from, pos)) != std::string::npos) {
@@ -86,30 +82,29 @@ fastrtps__replace_string(std::string str, const std::string & from, const std::s
   return str;
 }
 
-
 rcutils_ret_t
-fastrtps__convert_fastrtps_ret_to_rcl_ret(eprosima::fastrtps::types::ReturnCode_t fastrtps_ret)
+fastdds__convert_fastdds_ret_to_rcl_ret(eprosima::fastdds::dds::ReturnCode_t fastdds_ret)
 {
-  switch (fastrtps_ret()) {
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK:
+  switch (fastdds_ret) {
+    case eprosima::fastdds::dds::RETCODE_OK:
       return RCUTILS_RET_OK;
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_BAD_PARAMETER:
+    case eprosima::fastdds::dds::RETCODE_BAD_PARAMETER:
       return RCUTILS_RET_INVALID_ARGUMENT;
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_OUT_OF_RESOURCES:
+    case eprosima::fastdds::dds::RETCODE_OUT_OF_RESOURCES:
       return RCUTILS_RET_NOT_ENOUGH_SPACE;
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_NO_DATA:
+    case eprosima::fastdds::dds::RETCODE_NO_DATA:
       return RCUTILS_RET_NOT_FOUND;
 
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_ERROR:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_UNSUPPORTED:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_PRECONDITION_NOT_MET:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_NOT_ENABLED:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_ILLEGAL_OPERATION:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_NOT_ALLOWED_BY_SECURITY:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_IMMUTABLE_POLICY:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_INCONSISTENT_POLICY:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_ALREADY_DELETED:
-    case eprosima::fastrtps::types::ReturnCode_t::RETCODE_TIMEOUT:
+    case eprosima::fastdds::dds::RETCODE_ERROR:
+    case eprosima::fastdds::dds::RETCODE_UNSUPPORTED:
+    case eprosima::fastdds::dds::RETCODE_PRECONDITION_NOT_MET:
+    case eprosima::fastdds::dds::RETCODE_NOT_ENABLED:
+    case eprosima::fastdds::dds::RETCODE_ILLEGAL_OPERATION:
+    case eprosima::fastdds::dds::RETCODE_NOT_ALLOWED_BY_SECURITY:
+    case eprosima::fastdds::dds::RETCODE_IMMUTABLE_POLICY:
+    case eprosima::fastdds::dds::RETCODE_INCONSISTENT_POLICY:
+    case eprosima::fastdds::dds::RETCODE_ALREADY_DELETED:
+    case eprosima::fastdds::dds::RETCODE_TIMEOUT:
     default:
       return RCUTILS_RET_ERROR;
   }

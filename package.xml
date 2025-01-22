@@ -10,12 +10,12 @@
   <author email="brandon@openrobotics.org">Brandon Ong</author>
 
   <buildtool_depend>ament_cmake_ros</buildtool_depend>
-  <buildtool_depend>fastrtps_cmake_module</buildtool_depend>
 
+  <depend>rcpputils</depend>
   <depend>rcutils</depend>
   <depend>rosidl_dynamic_typesupport</depend>
   <depend>fastcdr</depend>
-  <depend>fastrtps</depend>
+  <depend>fastdds</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

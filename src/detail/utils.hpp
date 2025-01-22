@@ -15,7 +15,8 @@
 #ifndef DETAIL__UTILS_HPP_
 #define DETAIL__UTILS_HPP_
 
-#include <fastrtps/types/TypesBase.h>
+#include <cstdint>
+#include <fastdds/dds/core/ReturnCode.hpp>
 #include <rosidl_dynamic_typesupport_fastrtps/visibility_control.h>
 #include <rcutils/types/rcutils_ret.h>
 #include <string>
@@ -25,33 +26,33 @@
 /// `in` must be smaller than std::numeric_limits<uint32_t>::max()
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 uint32_t
-fastrtps__size_t_to_uint32_t(size_t in);
+fastdds__size_t_to_uint32_t(size_t in);
 
 /// u16string copy
 /// `dest` and `src` cannot be NULL, this method will return NULL in those cases
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 char16_t *
-fastrtps__ucsncpy(char16_t * dest, const char16_t * src, size_t n);
+fastdds__ucsncpy(char16_t * dest, const char16_t * src, size_t n);
 
 /// Convert u16string to wstring
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 std::wstring
-fastrtps__u16string_to_wstring(const std::u16string & u16str);
+fastdds__u16string_to_wstring(const std::u16string & u16str);
 
 /// Convert wstring to u16string
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 std::u16string
-fastrtps__wstring_to_u16string(const std::wstring & wstr);
+fastdds__wstring_to_u16string(const std::wstring & wstr);
 
 /// Substring replace
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 std::string
-fastrtps__replace_string(std::string str, const std::string & from, const std::string & to);
+fastdds__replace_string(std::string str, const std::string & from, const std::string & to);
 
-/// Convert FastRTPS return types to rcl
+/// Convert fastdds return types to rcl
 ROSIDL_DYNAMIC_TYPESUPPORT_FASTRTPS_PUBLIC
 rcutils_ret_t
-fastrtps__convert_fastrtps_ret_to_rcl_ret(eprosima::fastrtps::types::ReturnCode_t fastrtps_ret);
+fastdds__convert_fastdds_ret_to_rcl_ret(eprosima::fastdds::dds::ReturnCode_t fastdds_ret);
 
 
 #endif  // DETAIL__UTILS_HPP_

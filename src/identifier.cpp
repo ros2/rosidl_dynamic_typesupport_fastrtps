@@ -15,4 +15,4 @@
 #include "rosidl_dynamic_typesupport_fastrtps/identifier.h"
 
 // TODO(methylDragon): Maybe something more specific?
-const char * const fastrtps_serialization_support_library_identifier = "fastcdr";
+const char * const fastdds_serialization_support_library_identifier = "fastcdr";

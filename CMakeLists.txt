@@ -23,12 +23,11 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # DEPS =============================================================================================
 find_package(ament_cmake_ros REQUIRED)
+find_package(rcpputils REQUIRED)
 find_package(rcutils REQUIRED)
 find_package(rosidl_dynamic_typesupport REQUIRED)
-find_package(fastrtps_cmake_module REQUIRED)
-find_package(fastcdr REQUIRED CONFIG)
-find_package(fastrtps 2.3 REQUIRED CONFIG)
-find_package(FastRTPS 2.3 REQUIRED MODULE)
+find_package(fastcdr REQUIRED)
+find_package(fastdds 3 REQUIRED)
 
 
 # TARGETS ==========================================================================================
@@ -50,9 +49,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>"
 )
 target_link_libraries(${PROJECT_NAME}
+  rcpputils::rcpputils
+  rcutils::rcutils
   rosidl_dynamic_typesupport::rosidl_dynamic_typesupport
   fastcdr
-  fastrtps
+  fastdds
 )
 
 
@@ -68,6 +69,7 @@ install(DIRECTORY include/
 )
 
 ament_export_targets(${PROJECT_NAME}-export HAS_LIBRARY_TARGET)
+ament_export_dependencies(rcpputils)
 ament_export_dependencies(rcutils)
 ament_export_dependencies(rosidl_dynamic_typesupport)
 
