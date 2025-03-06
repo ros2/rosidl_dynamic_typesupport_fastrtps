@@ -2,8 +2,8 @@
 Changelog for package rosidl_dynamic_typesupport_fastrtps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2025-03-06)
+------------------
 * Changes to build against Fast DDS 3.0 (`#5 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/5>`_)
 * Contributors: Chris Lalancette, Miguel Company
 
