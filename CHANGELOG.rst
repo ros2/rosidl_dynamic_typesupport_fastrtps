@@ -2,6 +2,11 @@
 Changelog for package rosidl_dynamic_typesupport_fastrtps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.1 (2025-04-18)
+------------------
+* Switch to ament_cmake_ros_core package (`#8 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/8>`_)
+* Contributors: Scott K Logan
+
 0.4.0 (2025-03-06)
 ------------------
 * Changes to build against Fast DDS 3.0 (`#5 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/5>`_)
