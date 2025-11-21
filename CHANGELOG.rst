@@ -2,6 +2,11 @@
 Changelog for package rosidl_dynamic_typesupport_fastrtps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.2 (2025-11-21)
+------------------
+* Merge pull request `#11 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/11>`_ from mosfet80/patch-1 (`#12 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/12>`_)
+* Contributors: mergify[bot]
+
 0.4.1 (2025-04-18)
 ------------------
 * Switch to ament_cmake_ros_core package (`#8 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/8>`_)
