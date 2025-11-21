@@ -2,6 +2,12 @@
 Changelog for package rosidl_dynamic_typesupport_fastrtps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.5.1 (2025-11-21)
+------------------
+* Merge pull request `#11 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/11>`_ from mosfet80/patch-1
+* Don't automatically enable verbose makefiles. (`#9 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/9>`_)
+* Contributors: Chris Lalancette, mosfet80
+
 0.5.0 (2025-04-25)
 ------------------
 
