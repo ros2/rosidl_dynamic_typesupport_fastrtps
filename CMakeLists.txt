@@ -8,11 +8,6 @@ if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 11)
 endif()
 
-# Default to C++20
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 20)
-endif()
-
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -46,6 +41,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>"
 )
 target_link_libraries(${PROJECT_NAME}
+  ament_cmake_ros_core::ament_ros_cxx_standard
   rcpputils::rcpputils
   rcutils::rcutils
   rosidl_dynamic_typesupport::rosidl_dynamic_typesupport
@@ -66,6 +62,7 @@ install(DIRECTORY include/
 )
 
 ament_export_targets(${PROJECT_NAME}-export HAS_LIBRARY_TARGET)
+ament_export_dependencies(ament_cmake_ros_core)
 ament_export_dependencies(rcpputils)
 ament_export_dependencies(rcutils)
 ament_export_dependencies(rosidl_dynamic_typesupport)
