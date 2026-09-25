@@ -3,11 +3,6 @@ project(rosidl_dynamic_typesupport_fastrtps)
 
 
 # COMPILER SETTINGS ================================================================================
-# Default to C11
-if(NOT CMAKE_C_STANDARD)
-  set(CMAKE_C_STANDARD 11)
-endif()
-
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -41,7 +36,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>"
 )
 target_link_libraries(${PROJECT_NAME}
-  ament_cmake_ros_core::ament_ros_cxx_standard
+  ament_cmake_ros_core::ament_ros_defaults
   rcpputils::rcpputils
   rcutils::rcutils
   rosidl_dynamic_typesupport::rosidl_dynamic_typesupport

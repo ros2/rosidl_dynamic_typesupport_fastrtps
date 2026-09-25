@@ -10,6 +10,7 @@
   <author email="brandon@openrobotics.org">Brandon Ong</author>
 
   <buildtool_depend>ament_cmake_ros_core</buildtool_depend>
+  <buildtool_export_depend>ament_cmake_ros_core</buildtool_export_depend>
 
   <depend>rcpputils</depend>
   <depend>rcutils</depend>
