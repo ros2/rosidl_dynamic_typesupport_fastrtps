@@ -2,6 +2,13 @@
 Changelog for package rosidl_dynamic_typesupport_fastrtps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.6.1 (2026-11-03)
+------------------
+* chore: use ament_cmake_ros_core for both C and C++ (`#16 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/16>`_)
+* Use the SPDX identifier Apache-2.0 in package.xml license tags (`#14 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/14>`_)
+* use C++ 20 in default. (`#13 <https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/13>`_)
+* Contributors: Beniamino Pozzan, Michael Carroll, Tomoya Fujita
+
 0.6.0 (2026-05-05)
 ------------------
 
