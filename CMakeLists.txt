@@ -62,4 +62,16 @@ ament_export_dependencies(rcpputils)
 ament_export_dependencies(rcutils)
 ament_export_dependencies(rosidl_dynamic_typesupport)
 
+
+# TESTS ============================================================================================
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+
+  # Regression test for https://github.com/ros2/rosidl_dynamic_typesupport_fastrtps/issues/17
+  ament_add_gtest(test_dynamic_type_init "test/test_dynamic_type_init.cpp")
+  if(TARGET test_dynamic_type_init)
+    target_link_libraries(test_dynamic_type_init ${PROJECT_NAME})
+  endif()
+endif()
+
 ament_package()

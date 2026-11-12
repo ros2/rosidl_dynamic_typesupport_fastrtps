@@ -235,6 +235,7 @@ fastdds__dynamic_type_init_from_dynamic_type_builder(
 
   type_impl->handle = type_handle;
   type_impl->allocator = *allocator;
+  cleanup_type_handle.cancel();
   return RCUTILS_RET_OK;
 }
 
